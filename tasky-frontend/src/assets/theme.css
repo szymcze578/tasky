@@ -1,0 +1,77 @@
+@theme {
+  /* ── Brand — coral primary ───────────────────────────── */
+  --color-coral: #f76c4b;
+  --color-coral-600: #e0573a;
+  --color-coral-700: #d2643f;
+  --color-coral-soft: #ffe7dc; /* avatar / tinted chip bg */
+  --color-coral-tint: #ffede5; /* active nav bg */
+
+  /* ── Warm neutrals / surfaces ────────────────────────── */
+  --color-cream-50: #fffdfb; /* cards, inputs */
+  --color-cream-100: #fff8f3;
+  --color-cream-200: #fbf6f0; /* app background */
+  --color-cream-300: #faf1eb; /* sidebar hover / profile pill */
+  --color-cream-400: #f6ece4; /* kanban column bg */
+
+  /* ── Soft warm tints (chips / pills) ─────────────────── */
+  --color-blush: #fbefe9; /* type-pill bg */
+  --color-blush-100: #fcefe7; /* dashed create tile */
+
+  /* ── Borders ─────────────────────────────────────────── */
+  --color-line: #f1e4da;
+  --color-line-warm: #f3e7df;
+  --color-line-input: #f0ddd2;
+  --color-line-soft: #f0e2d8;
+
+  /* ── Ink / text ramp ─────────────────────────────────── */
+  --color-ink: #3a2e28; /* headings + body */
+  --color-ink-600: #6b5e55; /* nav labels */
+  --color-ink-500: #9b8b80; /* muted buttons */
+  --color-ink-400: #a8978b; /* secondary text */
+  --color-ink-300: #bba99c; /* section eyebrows */
+  --color-ink-tag: #b07a63; /* pill text */
+
+  /* ── Board / status accents ──────────────────────────── */
+  --color-accent-amber: #f2a65a;
+  --color-accent-terracotta: #e07a5f;
+  --color-accent-clay: #d98e73;
+  --color-accent-blue: #7ba7bc; /* "Review" column */
+  --color-accent-green: #6fb08a; /* "Done" column */
+
+  /* ── Fonts ───────────────────────────────────────────── */
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Quicksand', ui-rounded, sans-serif;
+
+  /* ── Radius ──────────────────────────────────────────── */
+  --radius-xl: 14px;
+  --radius-2xl: 16px;
+  --radius-3xl: 18px;
+  --radius-4xl: 20px;
+  --radius-pill: 999px;
+
+  /* ── Warm-tinted elevations ──────────────────────────── */
+  --shadow-card: 0 2px 6px rgba(180, 120, 90, 0.07);
+  --shadow-soft: 0 3px 12px rgba(180, 120, 90, 0.09);
+  --shadow-panel: 0 10px 30px rgba(180, 120, 90, 0.12);
+  --shadow-coral: 0 8px 18px rgba(247, 108, 75, 0.34);
+  --shadow-coral-sm: 0 6px 14px rgba(247, 108, 75, 0.3);
+  --shadow-screen: 0 16px 50px rgba(120, 80, 60, 0.18);
+
+  /* ── Breakpoints ─────────────────────────────────────── */
+  /* Adds a new breakpoint without removing v4 defaults (sm/md/lg/xl/2xl) */
+  --breakpoint-tablet: 721px;
+
+  /* ── Animation ───────────────────────────────────────── */
+  --animate-slide-down: slideDown 0.26s ease;
+
+  @keyframes slideDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

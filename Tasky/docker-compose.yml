@@ -1,0 +1,36 @@
+name: tasky
+
+services:
+  boardsDB:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: boards_user
+      POSTGRES_PASSWORD: boards_password
+      POSTGRES_DB: boards_db
+    ports:
+      - "5050:5432"
+    volumes:
+      - boards_db_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U boards_user -d boards_db"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Tasky.API/Dockerfile
+    ports:
+      - "6060:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+      # Inside the compose network the API reaches Postgres by service name + internal port.
+      ConnectionStrings__DefaultConnection: "Host=boardsDB;Port=5432;Database=boards_db;Username=boards_user;Password=boards_password;"
+    depends_on:
+      boardsDB:
+        condition: service_healthy
+
+volumes:
+  boards_db_data:

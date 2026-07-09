@@ -1,0 +1,6 @@
+@Tasky.API_HostAddress = http://localhost:6060
+
+GET {{Tasky.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
