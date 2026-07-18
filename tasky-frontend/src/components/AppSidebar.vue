@@ -1,6 +1,5 @@
 <template>
   <aside class="flex h-screen w-66 flex-col border-r border-line bg-cream-50 px-4.5 py-6">
-    <!-- Logo -->
     <TheLogo />
     <div class="flex flex-1 flex-col justify-between">
       <nav class="flex flex-col gap-0.75">

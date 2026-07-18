@@ -43,14 +43,14 @@
     <div class="mt-5 flex justify-end gap-2.5">
       <button
         type="button"
-        class="flex-none rounded-xl border-none bg-line-warm px-5 py-3 text-[14px] font-bold text-ink-500"
+        class="flex-none rounded-xl border-none bg-line-warm px-5 py-3 text-[14px] font-bold text-ink-500 hover:brightness-95"
         @click="cancel"
       >
         Cancel
       </button>
       <button
         type="button"
-        class="rounded-xl border-none bg-coral px-6 py-3 text-[14px] font-bold text-white shadow-coral-sm"
+        class="rounded-xl border-none bg-coral px-6 py-3 text-[14px] font-bold text-white shadow-coral-sm transition-[filter] hover:brightness-105"
         @click="submit"
       >
         Create board
@@ -89,7 +89,7 @@ function cancel() {
 
 function segClass(active: boolean) {
   return [
-    'flex flex-1 items-center justify-center gap-2 rounded-xl border-none py-[11px] text-[14px] font-bold transition-all sm:flex-none sm:px-4',
+    'flex flex-1 items-center justify-center gap-2 rounded-xl border-none py-[11px] text-[14px] font-bold transition-all sm:flex-none sm:px-4 hover:brightness-95',
     active ? 'bg-coral text-white' : 'bg-blush text-ink-tag',
   ]
 }
