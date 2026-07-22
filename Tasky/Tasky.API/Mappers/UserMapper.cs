@@ -1,4 +1,5 @@
 ﻿using Tasky.API.ViewModels;
+using Tasky.API.ViewModels.Auth;
 using Tasky.Application.Model;
 
 namespace Tasky.API.Mappers
@@ -19,17 +20,12 @@ namespace Tasky.API.Mappers
             };
         }
 
-        public static CreateUserViewModel Map(CreateUserDTO dto)
+        public static LoginUserDTO Map(LoginUserRequest request)
         {
-            return new CreateUserViewModel
+            return new LoginUserDTO
             {
-                UserName = dto.UserName,
-                Email = dto.Email,
-                Password = dto.Password,
-                Street = dto.Street,
-                City = dto.City,
-                PostalCode = dto.PostalCode,
-                Country = dto.Country
+                Login = request.Login,
+                Password = request.Password,
             };
         }
     }

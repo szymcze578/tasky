@@ -23,6 +23,13 @@ namespace Tasky.Infrastructure.Persistance
             {
                 builder.HasKey(user => user.UserId);
                 builder.OwnsOne(user => user.Address);
+
+                builder.Property(user => user.Email)
+                    .HasMaxLength(256)
+                    .IsRequired();
+
+                builder.HasIndex(user => user.Email)
+                    .IsUnique();
             });
 
             modelBuilder.Entity<BoardEntity>(builder =>

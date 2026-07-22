@@ -4,17 +4,28 @@ using Tasky.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
+using Tasky.Application.Interfaces.Infrastructure;
 
 namespace Tasky.API.Controllers
 {
 
     [Route("api/board")]
     [ApiController]
-    public class BoardController(IBoardsService boardsService) : ControllerBase
+    public class BoardController(IBoardsService boardsService, IConfiguration configuration) : ControllerBase
     {
 
+        [HttpGet]
+        [ProducesResponseType(typeof(string), 200)]
+        [Route("GetConfiguration")]
+        public async Task<IActionResult> GetConfig()
+        {
+            var config = configuration["JWT:Issuer"];
+
+            return Ok(config);
+        }
 
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<BoardViewModel>), 200)]
         [Route("")]
         public async Task<IActionResult> GetBoardsForUser(Guid userId)
         {

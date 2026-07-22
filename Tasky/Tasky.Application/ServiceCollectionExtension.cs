@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
+using Tasky.Domain.Entities;
 
 
 namespace Tasky.Application
@@ -15,6 +17,7 @@ namespace Tasky.Application
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IBoardsService, BoardsService>();
+            services.AddScoped<IPasswordHasher<UserEntity>, PasswordHasher<UserEntity>>();
 
             return services;
         }

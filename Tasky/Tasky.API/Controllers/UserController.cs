@@ -17,21 +17,5 @@ namespace Tasky.API.Controllers
         {
             return Ok("User endpoint is working");
         }
-
-        [HttpPost]
-        public IActionResult CreateUser([FromBody] CreateUserViewModel user) {
-            if(user == null) {
-                return BadRequest("User data is empty!");
-            }
-
-            try
-            {
-                userService.CreateUser(UserMapper.Map(user));
-            }
-            catch (Exception ex) {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-            return Created();
-        }
     }
 }
