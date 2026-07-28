@@ -17,6 +17,7 @@ namespace Tasky.Application
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IBoardsService, BoardsService>();
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IPasswordHasher<UserEntity>, PasswordHasher<UserEntity>>();
 
             return services;

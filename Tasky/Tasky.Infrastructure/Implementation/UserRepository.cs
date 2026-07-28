@@ -1,6 +1,7 @@
 ﻿using Tasky.Application.Exceptions;
 using Tasky.Application.Interfaces.Infrastructure;
 using Tasky.Domain.Entities;
+using Tasky.Domain.Helpers;
 using Tasky.Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
@@ -22,7 +23,7 @@ namespace Tasky.Infrastructure.Implementation
 
         public async Task<bool> ExistsByEmail(string email)
         {
-            var normalizedEmail = Email.Normalize(email);
+            var normalizedEmail = EmailHelper.Normalize(email);
 
             return await dbContext.Users.AnyAsync(u => u.Email == normalizedEmail);
         }
@@ -46,7 +47,28 @@ namespace Tasky.Infrastructure.Implementation
             }
         }
 
+        public async Task<UserEntity?> GetUserById(Guid userId)
+        {
+            return await dbContext.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+        }
+
+        public async Task UpdateUser(UserEntity user)
+        {
+            dbContext.Users.Update(user);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public Task SaveChangesAsync(CancellationToken ct)
+            => dbContext.SaveChangesAsync(ct);
+
         private static bool IsUniqueViolation(DbUpdateException ex)
             => ex.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation };
+
+        public Task<UserEntity?> GetUserByEmail(string email)
+        {
+            var normalizedEmail = EmailHelper.Normalize(email);
+
+            return dbContext.Users.FirstOrDefaultAsync(u => u.Email == normalizedEmail);
+        }
     }
 }

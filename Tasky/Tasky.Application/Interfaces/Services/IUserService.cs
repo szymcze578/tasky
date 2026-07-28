@@ -3,5 +3,6 @@ namespace Tasky.Application.Interfaces.Services
 {
     public interface IUserService
     {
+        Task SetAddress(Guid userId, AddressDTO address);
     }
 }

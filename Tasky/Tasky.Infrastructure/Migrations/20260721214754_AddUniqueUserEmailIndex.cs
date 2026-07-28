@@ -10,7 +10,7 @@ namespace Tasky.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // Normalize existing emails to the canonical form (see Email.Normalize) before
+            // Normalize existing emails to the canonical form (see EmailHelper.Normalize) before
             // building the unique index, otherwise case-only duplicates would survive it.
             // If this exposes real duplicates, the CreateIndex below fails loudly - resolve
             // them by hand rather than letting the migration pick an arbitrary winner.

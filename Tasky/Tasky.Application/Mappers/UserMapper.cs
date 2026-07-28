@@ -12,13 +12,7 @@ namespace Tasky.Application.Mappers
             {
                 UserName = userDTO.UserName,
                 Email = userDTO.Email,
-                Password = userDTO.Password,
-                Address = new Address 
-                {   Street = userDTO.Street,
-                    City = userDTO.City,
-                    PostalCode = userDTO.PostalCode,
-                    Country = userDTO.Country,             
-                }
+                Password = userDTO.Password
             };
         }
     }

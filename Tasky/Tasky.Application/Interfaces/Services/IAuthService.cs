@@ -9,6 +9,6 @@ namespace Tasky.Application.Interfaces.Services
     {
         Task<Guid> Register(CreateUserDTO user);
 
-        Task<string> Login(LoginUserDTO loginRequest);
+        Task<AuthResultDTO> Login(LoginUserDTO loginRequest);
     }
 }

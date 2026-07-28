@@ -1,16 +1,18 @@
-﻿using Tasky.API.Mappers;
-using Tasky.API.ViewModels;
-using Tasky.Application.Interfaces.Services;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
+using Tasky.API.Mappers;
+using Tasky.API.ViewModels;
 using Tasky.Application.Interfaces.Infrastructure;
+using Tasky.Application.Interfaces.Services;
 
 namespace Tasky.API.Controllers
 {
 
-    [Route("api/board")]
+    [Authorize]
     [ApiController]
+    [Route("api/board")]
     public class BoardController(IBoardsService boardsService, IConfiguration configuration) : ControllerBase
     {
 
@@ -19,9 +21,10 @@ namespace Tasky.API.Controllers
         [Route("GetConfiguration")]
         public async Task<IActionResult> GetConfig()
         {
+            var userIdClaim = User.FindFirst("UserId")?.Value;
             var config = configuration["JWT:Issuer"];
 
-            return Ok(config);
+            return Ok(userIdClaim);
         }
 
         [HttpGet]

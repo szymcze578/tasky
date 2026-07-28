@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Tasky.API.ViewModels
+namespace Tasky.API.ViewModels.Auth
 {
-    public class CreateUserViewModel
+    public class CreateUserRequest
     {
         [Required(ErrorMessage = "Username is required.")]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Username must be between 3 and 50 characters.")]
@@ -19,17 +19,5 @@ namespace Tasky.API.ViewModels
             ErrorMessage = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.")]
         [StringLength(100)]
         public required string Password { get; set; }
-
-        [StringLength(100)]
-        public string? Street { get; set; }
-
-        [StringLength(50)]
-        public string? City { get; set; }
-
-        [RegularExpression(@"^\d{2}-\d{3}$|\d{5}(-\d{4})?$", ErrorMessage = "Invalid postal code format.")]
-        public string? PostalCode { get; set; }
-
-        [StringLength(50)]
-        public string? Country { get; set; }
     }
 }

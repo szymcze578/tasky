@@ -17,6 +17,7 @@ namespace Tasky.Infrastructure
             services.AddScoped<ITaskRepository, TaskRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IBoardsRepository, BoardsRepository>();
+            services.AddScoped<ITokenGenerator, JwtTokenGenerator>();
 
             return services;
         }
