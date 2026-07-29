@@ -1,3 +1,4 @@
+import { useAuthStore } from '@/stores/authStore'
 import { useUserStore } from '@/stores/userStore'
 import BoardListScreen from '@/views/BoardListScreen.vue'
 import BoardView from '@/views/BoardView.vue'
@@ -29,10 +30,13 @@ const router = createRouter({
 })
 
 router.beforeEach((to) => {
-  const userStore = useUserStore()
-  if (!userStore.user && to.name !== 'login') {
+  if (!useAuthStore().isAuthenticated && to.name !== 'login' && to.name !== 'register') {
     return { name: 'login' }
   }
+  const userStore = useUserStore()
+  // if (!userStore.user && to.name !== 'login' && to.name !== 'register') {
+  //   return { name: 'login' }
+  // }
 })
 
 export default router

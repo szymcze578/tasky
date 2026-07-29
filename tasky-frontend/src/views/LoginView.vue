@@ -1,61 +1,17 @@
 <template>
-  <div
-    class="relative flex flex-col min-h-screen w-full items-center justify-center overflow-hidden bg-cream-200 p-6 font-sans"
-  >
-    <div class="absolute left-8 top-7 flex items-center gap-2.75">
-      <TheLogo />
-    </div>
-    <div
-      class="pointer-events-none absolute -right-20 -top-30 h-90 w-90 rounded-full"
-      style="
-        background: radial-gradient(
-          circle at 30% 30%,
-          rgba(247, 108, 75, 0.16),
-          rgba(247, 108, 75, 0) 70%
-        );
-      "
-    />
-    <div
-      class="pointer-events-none absolute -bottom-35 -left-25 h-100 w-100 rounded-full"
-      style="
-        background: radial-gradient(
-          circle at 60% 40%,
-          rgba(242, 166, 90, 0.16),
-          rgba(242, 166, 90, 0) 70%
-        );
-      "
-    />
-    <form
-      class="flex w-full max-w-95 flex-col gap-4 rounded-xl border border-line bg-cream-50 p-8"
-      @submit.prevent="handleSubmit"
-    >
-      <div class="flex flex-col w-full">
-        <h1 class="font-display text-[27px] font-bold">Welcome back</h1>
-        <h2 class="font-sans text-[14px] text-ink-400 font-bold mt-2">
-          Log in to pick up where you left off.
-        </h2>
-      </div>
+  <AuthCard title="Welcome back">
+    <template #subtitle>Log in to pick up where you left off.</template>
 
-      <label class="flex flex-col gap-1.5">
-        <span class="text-[13px] text-ink-400">Email</span>
-        <input
-          v-model="email"
-          type="email"
-          autocomplete="email"
-          class="rounded-xl border border-line-soft bg-cream-50 px-3.75 py-2.75 text-[14.5px] text-ink outline-none placeholder:text-ink-400"
-        />
-      </label>
-
-      <label class="flex flex-col gap-1.5">
-        <span class="text-[13px] text-ink-400">Password</span>
-        <input
-          v-model="password"
-          type="password"
-          autocomplete="current-password"
-          class="rounded-xl border border-line-soft bg-cream-50 px-3.75 py-2.75 text-[14.5px] text-ink outline-none placeholder:text-ink-400"
-        />
-      </label>
-
+    <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
+      <AuthTextField v-model="email" label="Email" type="email" autocomplete="email" :icon="Mail" />
+      <AuthTextField
+        v-model="password"
+        label="Password"
+        type="password"
+        autocomplete="current-password"
+        :icon="Lock"
+      />
+      <!-- <AuthCheckbox v-model="remember">Keep me signed in</AuthCheckbox>-->
       <button
         type="submit"
         :disabled="!isValid"
@@ -63,28 +19,70 @@
       >
         Log in
       </button>
+
+      <div class="flex items-center gap-3.5">
+        <div class="h-px flex-1 bg-line" />
+        <span class="text-[12px] font-semibold text-ink-300">or</span>
+        <div class="h-px flex-1 bg-line" />
+      </div>
+
+      <button
+        type="button"
+        class="flex w-full items-center justify-center gap-2.75 rounded-xl border border-line-soft bg-white p-3.5 text-[14.5px] font-bold text-ink-500 transition-colors hover:bg-cream-300"
+        @click="handleGoogle"
+      >
+        <svg width="19" height="19" viewBox="0 0 24 24">
+          <path
+            fill="#EA4335"
+            d="M12 10.2v3.9h5.5c-.24 1.4-1.7 4.1-5.5 4.1-3.3 0-6-2.7-6-6.1S8.7 5.9 12 5.9c1.9 0 3.1.8 3.8 1.5l2.6-2.5C16.8 3.3 14.6 2.3 12 2.3 6.9 2.3 2.8 6.4 2.8 11.5S6.9 20.7 12 20.7c5.3 0 8.8-3.7 8.8-9 0-.6-.06-1-.15-1.5H12z"
+          />
+        </svg>
+        <span>Continue with Google</span>
+      </button>
     </form>
-    <p class="mt-5.5 text-center text-[14px] text-ink-500">
+
+    <template #footer>
       New to Tasky?
-      <a href="#" class="font-bold text-coral-600 no-underline">Create an account</a>
-    </p>
-  </div>
+      <a href="/register" class="font-bold text-coral-600 no-underline">Create an account</a>
+    </template>
+  </AuthCard>
 </template>
 
 <script setup lang="ts">
-import TheLogo from '@/components/icons/TheLogo.vue'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { Mail, Lock } from '@lucide/vue'
+import AuthTextField from '@/components/auth/AuthTextField.vue'
+import AuthCard from '@/components/auth/AuthCard.vue'
+import { useAuthStore } from '@/stores/authStore'
+import { bootstrap } from '@/api/services/bootstrap'
+import type { ApiError } from '@/api/client'
 
 const router = useRouter()
 
 const email = ref('')
 const password = ref('')
+const errorMessage = ref('')
 
 const isValid = computed(() => email.value.trim() !== '' && password.value.trim() !== '')
 
-function handleSubmit() {
-  if (!isValid.value) return
-  router.push('/')
+async function handleSubmit() {
+  if (!isValid.value) {
+    return
+  }
+
+  try {
+    await useAuthStore().login({ login: email.value, password: password.value })
+    await bootstrap()
+    router.push('/')
+  } catch (err) {
+    const { status, message } = err as ApiError
+    errorMessage.value = status === 401 ? 'Invalid email or password.' : message
+    console.error(errorMessage.value)
+  }
+}
+
+function handleGoogle() {
+  console.log('Login in with Google')
 }
 </script>

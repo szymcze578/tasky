@@ -1,3 +1,4 @@
+import { useAuthStore } from '@/stores/authStore'
 import axios, { AxiosError } from 'axios'
 
 export interface ApiError {
@@ -23,5 +24,24 @@ export const apiClient = axios.create({
 
 apiClient.interceptors.response.use(
   (response) => response,
-  (error: unknown) => Promise.reject(normalizeError(error)),
+  (error: unknown) => {
+    const isExpiredSession =
+      error instanceof AxiosError &&
+      error.response?.status === 401 &&
+      Boolean(error.config?.headers?.Authorization)
+
+    if (isExpiredSession) {
+      useAuthStore().logout()
+    }
+
+    return Promise.reject(normalizeError(error))
+  },
 )
+
+apiClient.interceptors.request.use((config) => {
+  const { accessToken } = useAuthStore()
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`
+  }
+  return config
+})

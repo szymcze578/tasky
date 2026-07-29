@@ -4,6 +4,9 @@
     <div
       class="flex items-center gap-2 rounded-xl border border-line-soft bg-cream-200 px-3.75 py-2.75"
     >
+      <span v-if="icon" class="flex h-4.5 w-4.5 items-center justify-center text-ink-400">
+        <component :is="icon" :size="18" />
+      </span>
       <input
         v-model="modelValue"
         :type="type"
@@ -17,11 +20,14 @@
 </template>
 
 <script setup lang="ts">
+import type { Component } from 'vue'
+
 defineProps<{
   label: string
   type?: string
   autocomplete?: string
   placeholder?: string
+  icon?: Component
 }>()
 
 const modelValue = defineModel()

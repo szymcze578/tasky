@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import AppSidebar from '@/components/AppSidebar.vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useUserStore } from '@/stores/userStore'
 import { LayoutGrid } from '@lucide/vue'
 import AppTopbar from '@/components/AppTopbar.vue'
@@ -30,12 +30,14 @@ const boardStore = useBoardStore()
 
 const search = ref('')
 
-const navItems = ref([
+const boardsCount = computed(() => boardStore.boards.length)
+
+const navItems = computed(() => [
   {
     id: 'all',
     label: 'All boards',
     icon: LayoutGrid,
-    count: boardStore.boards.length,
+    count: boardsCount.value,
   },
 ])
 </script>

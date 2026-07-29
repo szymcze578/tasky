@@ -2,13 +2,14 @@
   <AuthCard title="Create your account">
     <template #subtitle>Start organizing your day in minutes.</template>
     <form class="flex flex-col gap-4" @submit.prevent="handleRegistration">
-      <AuthTextField v-model="name" label="Full name" autocomplete="name" />
-      <AuthTextField v-model="email" label="Email" type="email" autocomplete="email" />
+      <AuthTextField v-model="name" label="Full name" autocomplete="name" :icon="User" />
+      <AuthTextField v-model="email" label="Email" type="email" autocomplete="email" :icon="Mail" />
       <AuthTextField
         v-model="password"
         label="Password"
         type="password"
         autocomplete="new-password"
+        :icon="Lock"
       />
       <AuthCheckbox v-model="terms" />
       <button
@@ -51,9 +52,11 @@ import AuthCard from '@/components/auth/AuthCard.vue'
 import AuthTextField from '@/components/auth/AuthTextField.vue'
 import AuthCheckbox from '@/components/auth/AuthCheckbox.vue'
 import { computed, ref } from 'vue'
-//import { useRouter } from 'vue-router'
+import { registerUser } from '@/api/auth'
+import { useRouter } from 'vue-router'
+import { Lock, Mail, User } from '@lucide/vue'
 
-//const router = useRouter()
+const router = useRouter()
 
 const name = ref('')
 const email = ref('')
@@ -68,12 +71,16 @@ const isValid = computed(
     terms.value,
 )
 
-function handleRegistration() {
+async function handleRegistration() {
   if (!isValid.value) {
     return
   }
-  console.log('handle registration!')
-  //router.push('/')
+  try {
+    await registerUser({ userName: name.value, email: email.value, password: password.value })
+    router.push('/login')
+  } catch {
+    console.error('Failed to register user!')
+  }
 }
 
 function handleGoogle() {
