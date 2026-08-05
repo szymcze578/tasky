@@ -29,5 +29,5 @@
 </template>
 
 <script setup lang="ts">
-const modelValue = defineModel({ default: false })
+  const modelValue = defineModel({ default: false })
 </script>

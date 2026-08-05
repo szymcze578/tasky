@@ -2,6 +2,7 @@ import { useAuthStore } from '@/stores/authStore'
 import { useUserStore } from '@/stores/userStore'
 import BoardListScreen from '@/views/BoardListScreen.vue'
 import BoardView from '@/views/BoardView.vue'
+import ListView from '@/views/ListView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -13,7 +14,7 @@ const router = createRouter({
       children: [
         // Add future board routes here, e.g.:
         { path: '', name: 'boardList', component: BoardListScreen },
-        // { path: ':boardId', name: 'board', component: BoardScreen },
+        { path: '/boardId', name: 'board', component: ListView },
       ],
     },
     {
@@ -25,6 +26,9 @@ const router = createRouter({
       path: '/register',
       name: 'register',
       component: () => import('@/views/RegisterView.vue'),
+      children: [
+        { path: '/address', name: 'address', component: () => import('@/views/AddressView.vue') },
+      ],
     },
   ],
 })

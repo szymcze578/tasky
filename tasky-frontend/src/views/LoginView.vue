@@ -1,7 +1,6 @@
 <template>
   <AuthCard title="Welcome back">
     <template #subtitle>Log in to pick up where you left off.</template>
-
     <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
       <AuthTextField v-model="email" label="Email" type="email" autocomplete="email" :icon="Mail" />
       <AuthTextField
@@ -15,7 +14,7 @@
       <button
         type="submit"
         :disabled="!isValid"
-        class="mt-2 rounded-xl bg-ink px-3.75 py-2.75 text-[14.5px] font-medium text-cream-50 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+        class="mt-2 rounded-xl bg-ink px-3 py-2.5 text-[14.5px] font-medium text-cream-50 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
       >
         Log in
       </button>
@@ -25,18 +24,12 @@
         <span class="text-[12px] font-semibold text-ink-300">or</span>
         <div class="h-px flex-1 bg-line" />
       </div>
-
       <button
         type="button"
-        class="flex w-full items-center justify-center gap-2.75 rounded-xl border border-line-soft bg-white p-3.5 text-[14.5px] font-bold text-ink-500 transition-colors hover:bg-cream-300"
+        class="flex w-full items-center justify-center gap-2.75 rounded-xl border border-line-soft bg-white p-3 py-2.5 text-[14.5px] font-bold text-ink-500 transition-colors hover:bg-cream-300"
         @click="handleGoogle"
       >
-        <svg width="19" height="19" viewBox="0 0 24 24">
-          <path
-            fill="#EA4335"
-            d="M12 10.2v3.9h5.5c-.24 1.4-1.7 4.1-5.5 4.1-3.3 0-6-2.7-6-6.1S8.7 5.9 12 5.9c1.9 0 3.1.8 3.8 1.5l2.6-2.5C16.8 3.3 14.6 2.3 12 2.3 6.9 2.3 2.8 6.4 2.8 11.5S6.9 20.7 12 20.7c5.3 0 8.8-3.7 8.8-9 0-.6-.06-1-.15-1.5H12z"
-          />
-        </svg>
+        <img src="/public/GoogleIcon.png" width="25" height="25" />
         <span>Continue with Google</span>
       </button>
     </form>
@@ -49,40 +42,40 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { Mail, Lock } from '@lucide/vue'
-import AuthTextField from '@/components/auth/AuthTextField.vue'
-import AuthCard from '@/components/auth/AuthCard.vue'
-import { useAuthStore } from '@/stores/authStore'
-import { bootstrap } from '@/api/services/bootstrap'
-import type { ApiError } from '@/api/client'
+  import { computed, ref } from 'vue'
+  import { useRouter } from 'vue-router'
+  import { Mail, Lock } from '@lucide/vue'
+  import AuthTextField from '@/components/auth/AuthTextField.vue'
+  import AuthCard from '@/components/auth/AuthCard.vue'
+  import { useAuthStore } from '@/stores/authStore'
+  import { bootstrap } from '@/api/services/bootstrap'
+  import type { ApiError } from '@/api/client'
 
-const router = useRouter()
+  const router = useRouter()
 
-const email = ref('')
-const password = ref('')
-const errorMessage = ref('')
+  const email = ref('')
+  const password = ref('')
+  const errorMessage = ref('')
 
-const isValid = computed(() => email.value.trim() !== '' && password.value.trim() !== '')
+  const isValid = computed(() => email.value.trim() !== '' && password.value.trim() !== '')
 
-async function handleSubmit() {
-  if (!isValid.value) {
-    return
+  async function handleSubmit() {
+    if (!isValid.value) {
+      return
+    }
+
+    try {
+      await useAuthStore().login({ login: email.value, password: password.value })
+      await bootstrap()
+      router.push('/')
+    } catch (err) {
+      const { status, message } = err as ApiError
+      errorMessage.value = status === 401 ? 'Invalid email or password.' : message
+      console.error(errorMessage.value)
+    }
   }
 
-  try {
-    await useAuthStore().login({ login: email.value, password: password.value })
-    await bootstrap()
-    router.push('/')
-  } catch (err) {
-    const { status, message } = err as ApiError
-    errorMessage.value = status === 401 ? 'Invalid email or password.' : message
-    console.error(errorMessage.value)
+  function handleGoogle() {
+    console.log('Login in with Google')
   }
-}
-
-function handleGoogle() {
-  console.log('Login in with Google')
-}
 </script>

@@ -18,26 +18,26 @@
 </template>
 
 <script setup lang="ts">
-import AppSidebar from '@/components/AppSidebar.vue'
-import { computed, ref } from 'vue'
-import { useUserStore } from '@/stores/userStore'
-import { LayoutGrid } from '@lucide/vue'
-import AppTopbar from '@/components/AppTopbar.vue'
-import { useBoardStore } from '@/stores/boardStore'
+  import AppSidebar from '@/components/AppSidebar.vue'
+  import { computed, ref } from 'vue'
+  import { useUserStore } from '@/stores/userStore'
+  import { LayoutGrid } from '@lucide/vue'
+  import AppTopbar from '@/components/AppTopbar.vue'
+  import { useBoardStore } from '@/stores/boardStore'
 
-const userStore = useUserStore()
-const boardStore = useBoardStore()
+  const userStore = useUserStore()
+  const boardStore = useBoardStore()
 
-const search = ref('')
+  const search = ref('')
 
-const boardsCount = computed(() => boardStore.boards.length)
+  const boardsCount = computed(() => boardStore.boards.length)
 
-const navItems = computed(() => [
-  {
-    id: 'all',
-    label: 'All boards',
-    icon: LayoutGrid,
-    count: boardsCount.value,
-  },
-])
+  const navItems = computed(() => [
+    {
+      id: 'all',
+      label: 'All boards',
+      icon: LayoutGrid,
+      count: boardsCount.value,
+    },
+  ])
 </script>

@@ -16,12 +16,12 @@
 </template>
 
 <script setup lang="ts">
-withDefaults(
-  defineProps<{
-    size?: number
-  }>(),
-  {
-    size: 20,
-  },
-)
+  withDefaults(
+    defineProps<{
+      size?: number
+    }>(),
+    {
+      size: 20,
+    },
+  )
 </script>

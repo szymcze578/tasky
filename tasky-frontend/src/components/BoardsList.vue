@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mb-3.5 ml-0.5 text-[11.5px] fnont-bold tracking-[0.08em] text-ink-300">
+    <div class="mb-3.5 ml-0.5 text-[11.5px] font-bold tracking-[0.08em] text-ink-300">
       YOUR BOARDS
     </div>
 
@@ -23,12 +23,12 @@
 </template>
 
 <script setup lang="ts">
-import type { Board } from '@/types/types'
-import BoardCard from './BoardCard.vue'
+  import type { Board } from '@/types/types'
+  import BoardCard from './BoardCard.vue'
 
-defineProps<{
-  boards: Board[]
-}>()
+  defineProps<{
+    boards: Board[]
+  }>()
 
-defineEmits(['open'])
+  defineEmits(['open'])
 </script>

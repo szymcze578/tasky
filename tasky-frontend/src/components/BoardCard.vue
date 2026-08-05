@@ -25,14 +25,14 @@
 </template>
 
 <script setup lang="ts">
-import { BoardType, type Board } from '@/types/types'
-import dayjs from 'dayjs'
-import ArrowIcon from './icons/ArrowIcon.vue'
-import BoardIconSelector from './BoardIconSelector.vue'
+  import { BoardType, type Board } from '@/types/types'
+  import dayjs from 'dayjs'
+  import ArrowIcon from './icons/ArrowIcon.vue'
+  import BoardIconSelector from './BoardIconSelector.vue'
 
-defineProps<{
-  board: Board
-}>()
+  defineProps<{
+    board: Board
+  }>()
 
-defineEmits(['select-board'])
+  defineEmits(['select-board'])
 </script>

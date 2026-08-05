@@ -54,11 +54,11 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-  hasNotifications?: boolean
-}>()
+  defineProps<{
+    hasNotifications?: boolean
+  }>()
 
-const search = defineModel('search')
+  const search = defineModel('search')
 
-const emit = defineEmits(['update:search', 'notifications'])
+  const emit = defineEmits(['update:search', 'notifications'])
 </script>

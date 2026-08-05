@@ -8,9 +8,9 @@
 </template>
 
 <script setup lang="ts">
-import { BoardType } from '@/types/types'
-import KanbanIcon from './icons/KanbanIcon.vue'
-import ListIcon from './icons/ListIcon.vue'
+  import { BoardType } from '@/types/types'
+  import KanbanIcon from './icons/KanbanIcon.vue'
+  import ListIcon from './icons/ListIcon.vue'
 
-defineProps<{ type: BoardType; size?: number }>()
+  defineProps<{ type: BoardType; size?: number }>()
 </script>

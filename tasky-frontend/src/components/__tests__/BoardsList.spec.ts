@@ -19,7 +19,9 @@ describe('BoardsList', () => {
     expect(wrapper.text()).toContain('No boards yet')
 
     await wrapper.setProps({
-      boards: [{ id: '2', name: 'Product Roadmap', type: BoardType.Kanban, editedAt: '2026-07-08' }],
+      boards: [
+        { id: '2', name: 'Product Roadmap', type: BoardType.Kanban, editedAt: '2026-07-08' },
+      ],
     })
 
     expect(wrapper.text()).toContain('Product Roadmap')

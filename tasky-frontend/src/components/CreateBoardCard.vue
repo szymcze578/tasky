@@ -60,37 +60,37 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { BoardType } from '@/types/types'
-import KanbanIcon from './icons/KanbanIcon.vue'
-import ListIcon from './icons/ListIcon.vue'
+  import { ref } from 'vue'
+  import { BoardType } from '@/types/types'
+  import KanbanIcon from './icons/KanbanIcon.vue'
+  import ListIcon from './icons/ListIcon.vue'
 
-const emit = defineEmits<{
-  (e: 'create', name: string, type: BoardType): void
-  (e: 'cancel'): void
-}>()
+  const emit = defineEmits<{
+    (e: 'create', name: string, type: BoardType): void
+    (e: 'cancel'): void
+  }>()
 
-const name = ref('')
-const type = ref(BoardType.List)
+  const name = ref('')
+  const type = ref(BoardType.List)
 
-function submit() {
-  const trimmed = name.value.trim()
-  if (!trimmed) return
-  emit('create', trimmed, type.value)
-  name.value = ''
-  type.value = BoardType.List
-}
+  function submit() {
+    const trimmed = name.value.trim()
+    if (!trimmed) return
+    emit('create', trimmed, type.value)
+    name.value = ''
+    type.value = BoardType.List
+  }
 
-function cancel() {
-  name.value = ''
-  type.value = BoardType.List
-  emit('cancel')
-}
+  function cancel() {
+    name.value = ''
+    type.value = BoardType.List
+    emit('cancel')
+  }
 
-function segClass(active: boolean) {
-  return [
-    'flex flex-1 items-center justify-center gap-2 rounded-xl border-none py-[11px] text-[14px] font-bold transition-all sm:flex-none sm:px-4 hover:brightness-95',
-    active ? 'bg-coral text-white' : 'bg-blush text-ink-tag',
-  ]
-}
+  function segClass(active: boolean) {
+    return [
+      'flex flex-1 items-center justify-center gap-2 rounded-xl border-none py-[11px] text-[14px] font-bold transition-all sm:flex-none sm:px-4 hover:brightness-95',
+      active ? 'bg-coral text-white' : 'bg-blush text-ink-tag',
+    ]
+  }
 </script>

@@ -31,10 +31,10 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-  count: number
-  compact?: boolean
-}>()
+  defineProps<{
+    count: number
+    compact?: boolean
+  }>()
 
-const emit = defineEmits(['create'])
+  const emit = defineEmits(['create'])
 </script>

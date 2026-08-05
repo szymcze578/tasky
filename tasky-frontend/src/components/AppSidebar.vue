@@ -61,14 +61,14 @@
 </template>
 
 <script setup lang="ts">
-import type { NavItem, User } from '@/types/types'
-import TheLogo from './icons/TheLogo.vue'
+  import type { NavItem, User } from '@/types/types'
+  import TheLogo from './icons/TheLogo.vue'
 
-defineProps<{
-  nav: NavItem[]
-  activeNav: string
-  user: User
-}>()
+  defineProps<{
+    nav: NavItem[]
+    activeNav: string
+    user: User
+  }>()
 
-const emit = defineEmits(['select-nav', 'open-menu'])
+  const emit = defineEmits(['select-nav', 'open-menu'])
 </script>

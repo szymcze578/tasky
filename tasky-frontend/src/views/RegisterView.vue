@@ -48,42 +48,42 @@
 </template>
 
 <script setup lang="ts">
-import AuthCard from '@/components/auth/AuthCard.vue'
-import AuthTextField from '@/components/auth/AuthTextField.vue'
-import AuthCheckbox from '@/components/auth/AuthCheckbox.vue'
-import { computed, ref } from 'vue'
-import { registerUser } from '@/api/auth'
-import { useRouter } from 'vue-router'
-import { Lock, Mail, User } from '@lucide/vue'
+  import AuthCard from '@/components/auth/AuthCard.vue'
+  import AuthTextField from '@/components/auth/AuthTextField.vue'
+  import AuthCheckbox from '@/components/auth/AuthCheckbox.vue'
+  import { computed, ref } from 'vue'
+  import { registerUser } from '@/api/auth'
+  import { useRouter } from 'vue-router'
+  import { Lock, Mail, User } from '@lucide/vue'
 
-const router = useRouter()
+  const router = useRouter()
 
-const name = ref('')
-const email = ref('')
-const password = ref('')
-const terms = ref(false)
+  const name = ref('')
+  const email = ref('')
+  const password = ref('')
+  const terms = ref(false)
 
-const isValid = computed(
-  () =>
-    name.value.trim() !== '' &&
-    email.value.trim() !== '' &&
-    password.value.trim() !== '' &&
-    terms.value,
-)
+  const isValid = computed(
+    () =>
+      name.value.trim() !== '' &&
+      email.value.trim() !== '' &&
+      password.value.trim() !== '' &&
+      terms.value,
+  )
 
-async function handleRegistration() {
-  if (!isValid.value) {
-    return
+  async function handleRegistration() {
+    if (!isValid.value) {
+      return
+    }
+    try {
+      await registerUser({ userName: name.value, email: email.value, password: password.value })
+      router.push('/login')
+    } catch {
+      console.error('Failed to register user!')
+    }
   }
-  try {
-    await registerUser({ userName: name.value, email: email.value, password: password.value })
-    router.push('/login')
-  } catch {
-    console.error('Failed to register user!')
-  }
-}
 
-function handleGoogle() {
-  console.log('Registering by google!')
-}
+  function handleGoogle() {
+    console.log('Registering by google!')
+  }
 </script>

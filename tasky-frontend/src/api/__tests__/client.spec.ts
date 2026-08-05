@@ -4,19 +4,13 @@ import { normalizeError } from '../client'
 
 describe('normalizeError', () => {
   it('extracts status and message from an AxiosError response', () => {
-    const error = new AxiosError(
-      'Request failed',
-      'ERR_BAD_REQUEST',
-      undefined,
-      undefined,
-      {
-        status: 404,
-        statusText: 'Not Found',
-        headers: new AxiosHeaders(),
-        config: { headers: new AxiosHeaders() },
-        data: { message: 'Board not found' },
-      },
-    )
+    const error = new AxiosError('Request failed', 'ERR_BAD_REQUEST', undefined, undefined, {
+      status: 404,
+      statusText: 'Not Found',
+      headers: new AxiosHeaders(),
+      config: { headers: new AxiosHeaders() },
+      data: { message: 'Board not found' },
+    })
 
     expect(normalizeError(error)).toEqual({ status: 404, message: 'Board not found' })
   })

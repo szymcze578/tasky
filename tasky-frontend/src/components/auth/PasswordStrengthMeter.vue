@@ -11,29 +11,29 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+  import { computed } from 'vue'
 
-const props = defineProps({
-  password: { type: String, default: '' },
-})
+  const props = defineProps({
+    password: { type: String, default: '' },
+  })
 
-const current = computed(() => score(props.password))
+  const current = computed(() => score(props.password))
 
-const label = computed(() =>
-  props.password
-    ? `${labels[current.value]} password`
-    : 'Use 8+ characters with a mix of letters, numbers & symbols',
-)
+  const label = computed(() =>
+    props.password
+      ? `${labels[current.value]} password`
+      : 'Use 8+ characters with a mix of letters, numbers & symbols',
+  )
 
-function score(p: string) {
-  let s = 0
-  if (p.length >= 8) s++
-  if (/[A-Z]/.test(p) && /[a-z]/.test(p)) s++
-  if (/\d/.test(p)) s++
-  if (/[^A-Za-z0-9]/.test(p)) s++
-  return p.length === 0 ? 0 : s
-}
+  function score(p: string) {
+    let s = 0
+    if (p.length >= 8) s++
+    if (/[A-Z]/.test(p) && /[a-z]/.test(p)) s++
+    if (/\d/.test(p)) s++
+    if (/[^A-Za-z0-9]/.test(p)) s++
+    return p.length === 0 ? 0 : s
+  }
 
-const colors = ['#EBDCD1', '#E0745A', '#F2A65A', '#D9B54A', '#6FB08A']
-const labels = ['', 'Weak', 'Fair', 'Good', 'Strong']
+  const colors = ['#EBDCD1', '#E0745A', '#F2A65A', '#D9B54A', '#6FB08A']
+  const labels = ['', 'Weak', 'Fair', 'Good', 'Strong']
 </script>

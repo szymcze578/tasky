@@ -25,24 +25,24 @@
 </template>
 
 <script setup lang="ts">
-import TheLogo from '@/components/icons/TheLogo.vue'
+  import TheLogo from '@/components/icons/TheLogo.vue'
 
-defineProps<{ title: string }>()
+  defineProps<{ title: string }>()
 </script>
 
 <style scoped>
-.glow-coral {
-  background: radial-gradient(
-    circle at 30% 30%,
-    rgba(247, 108, 75, 0.16),
-    rgba(247, 108, 75, 0) 70%
-  );
-}
-.glow-amber {
-  background: radial-gradient(
-    circle at 60% 40%,
-    rgba(242, 166, 90, 0.16),
-    rgba(242, 166, 90, 0) 70%
-  );
-}
+  .glow-coral {
+    background: radial-gradient(
+      circle at 30% 30%,
+      rgba(247, 108, 75, 0.16),
+      rgba(247, 108, 75, 0) 70%
+    );
+  }
+  .glow-amber {
+    background: radial-gradient(
+      circle at 60% 40%,
+      rgba(242, 166, 90, 0.16),
+      rgba(242, 166, 90, 0) 70%
+    );
+  }
 </style>
