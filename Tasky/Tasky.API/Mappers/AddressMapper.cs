@@ -1,5 +1,5 @@
 ﻿using Tasky.API.ViewModels.Auth;
-using Tasky.Application.Model;
+using Tasky.Application.Users.Dtos;
 
 namespace Tasky.API.Mappers
 {

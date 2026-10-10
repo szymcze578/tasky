@@ -1,11 +1,12 @@
-﻿using Tasky.Application.Interfaces.Services;
-using Tasky.Application.Services;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Tasky.Domain.Entities;
+using Tasky.Application.Boards;
+using Tasky.Application.Users;
+using Tasky.Application.Tasks;
 
 
 namespace Tasky.Application

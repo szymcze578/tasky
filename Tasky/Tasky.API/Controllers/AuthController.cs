@@ -4,8 +4,7 @@ using System.Net;
 using Tasky.API.Mappers;
 using Tasky.API.ViewModels.Auth;
 using Tasky.Application.Exceptions;
-using Tasky.Application.Interfaces.Services;
-using Tasky.Application.Services;
+using Tasky.Application.Users;
 
 namespace Tasky.API.Controllers;
 

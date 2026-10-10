@@ -4,10 +4,10 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 # Copy csproj files first and restore, so this layer is cached unless deps change.
-COPY "Tasky.API/Tasky.API.csproj", "Tasky.API/"
-COPY "Tasky.Application/Tasky.Application.csproj", "Tasky.Application/"
-COPY "Tasky.Domain/Tasky.Domain.csproj", "Tasky.Domain/"
-COPY "Tasky.Infrastructure/Tasky.Infrastructure.csproj", "Tasky.Infrastructure/"
+COPY ["Tasky.API/Tasky.API.csproj", "Tasky.API/"]
+COPY ["Tasky.Application/Tasky.Application.csproj", "Tasky.Application/"]
+COPY ["Tasky.Domain/Tasky.Domain.csproj", "Tasky.Domain/"]
+COPY ["Tasky.Infrastructure/Tasky.Infrastructure.csproj", "Tasky.Infrastructure/"]
 
 RUN dotnet restore "Tasky.API/Tasky.API.csproj"
 

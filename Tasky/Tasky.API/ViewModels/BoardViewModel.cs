@@ -8,6 +8,8 @@ namespace Tasky.API.ViewModels
         public Guid ownerId { get; set; }
         public required string Name { get; set; }
         public string? Description { get; set; }
+        public int TasksCompleted { get; set; }
+        public int Tasks { get; set; }
         public BoardType Type {  get; set; }
         public DateTime creationDate { get; set; }
         public DateTime updateDate { get; set; } 

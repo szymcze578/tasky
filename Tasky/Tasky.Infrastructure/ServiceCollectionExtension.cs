@@ -1,9 +1,13 @@
-﻿using Tasky.Application.Interfaces.Infrastructure;
-using Tasky.Infrastructure.Implementation;
-using Tasky.Infrastructure.Persistance;
+﻿using Tasky.Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Tasky.Infrastructure.Auth;
+using Tasky.Infrastructure.Persistance.Repositories;
+using Tasky.Application.Boards;
+using Tasky.Application.Common.Abstractions;
+using Tasky.Application.Users;
+using Tasky.Application.Tasks;
 
 namespace Tasky.Infrastructure
 {

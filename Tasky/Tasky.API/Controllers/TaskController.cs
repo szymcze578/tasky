@@ -1,9 +1,11 @@
-﻿using Tasky.Application.Interfaces.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Tasky.API.ViewModels;
+using Tasky.API.Mappers;
+using Tasky.Application.Tasks;
 
 namespace Tasky.API.Controllers
 {
-    [Route("api/task")]
+    [Route("api/tasks")]
     [ApiController]
     public class TaskController(ITaskService taskService) : ControllerBase
     {
@@ -28,8 +30,16 @@ namespace Tasky.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddTask(Guid boardId )
+        [Route("")]
+        public IActionResult AddTask(Guid boardId, CreateTaskRequest createTask)
         {
+            if (boardId == Guid.Empty)
+            {
+                return BadRequest("BoardId cannot be empty");
+            }
+
+            taskService.AddTask(boardId, TaskMapper.Map(createTask));
+
             return Ok("Task added");
         }
     }

@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Tasky.Application;
-using Tasky.Application.Interfaces.Services;
-using Tasky.Application.Services;
 using Tasky.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
