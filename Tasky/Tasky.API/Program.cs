@@ -1,16 +1,23 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
+using Tasky.API.Services;
 using Tasky.Application;
+using Tasky.Application.Common.Abstractions;
 using Tasky.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructure(builder.Configuration);
+
+builder.Services.AddHttpContextAccessor();                  
+builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 
 var jwt = builder.Configuration.GetSection("Jwt");
 
@@ -60,10 +67,9 @@ else
 }
 
 app.UseCors("CorsPolicy");
-
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

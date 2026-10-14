@@ -1,5 +1,4 @@
 using Tasky.Domain.Entities;
-using Tasky.Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Tasky.Application.Boards;
 
@@ -7,7 +6,6 @@ namespace Tasky.Infrastructure.Persistance.Repositories;
 
 public class BoardsRepository : IBoardsRepository
 {
-
     private readonly BoardDbContext context;
 
     public BoardsRepository(BoardDbContext dbContext)
@@ -29,4 +27,12 @@ public class BoardsRepository : IBoardsRepository
         await context.Boards.AddAsync(board);
         await context.SaveChangesAsync();
     }
+
+    public async Task<BoardEntity?> GetOwnedById(Guid boardId, Guid ownerId)
+    => await context.Boards
+        .Include(b => b.Tasks)
+        .FirstOrDefaultAsync(b => b.BoardId == boardId && b.OwnerId == ownerId);
+
+
+    public Task SaveChanges() => context.SaveChangesAsync();
 }

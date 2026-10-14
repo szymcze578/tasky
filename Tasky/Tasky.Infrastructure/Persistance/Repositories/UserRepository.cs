@@ -1,12 +1,8 @@
 ﻿using Tasky.Application.Exceptions;
 using Tasky.Domain.Entities;
 using Tasky.Domain.Helpers;
-using Tasky.Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Tasky.Application.Users;
 
 namespace Tasky.Infrastructure.Persistance.Repositories;
@@ -43,7 +39,7 @@ public class UserRepository : IUserRepository
         }
         catch (DbUpdateException ex) when (IsUniqueViolation(ex))
         {
-            throw new DuplicateEmailException("User with specified email already exists", ex);
+            throw new DuplicateEmailException(user.Email);
         }
     }
 

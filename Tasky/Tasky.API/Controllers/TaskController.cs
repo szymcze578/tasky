@@ -1,46 +1,56 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Tasky.API.ViewModels;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Tasky.API.Mappers;
+using Tasky.API.ViewModels;
 using Tasky.Application.Tasks;
+using Tasky.Application.Tasks.Dtos;
 
-namespace Tasky.API.Controllers
+namespace Tasky.API.Controllers;
+
+[Authorize]
+[ApiController]
+[Route("api/boards/{boardId:guid}/tasks")]
+public class TaskController(ITaskService taskService) : ControllerBase
 {
-    [Route("api/tasks")]
-    [ApiController]
-    public class TaskController(ITaskService taskService) : ControllerBase
+
+    [HttpGet]
+    public async Task<ActionResult<IReadOnlyList<TaskDto>>> GetTasks(Guid boardId)
     {
+        return Ok(await taskService.GetTasks(boardId));
+    }
 
-        [HttpGet]
-        [Route("")]
-        public IActionResult GetTasks(Guid boardId)
-        {
-            if (boardId == Guid.Empty)
-            {
-                return BadRequest("BoardId is required");
-            }
+    [HttpGet("{taskId:guid}")]
+    public async Task<ActionResult<TaskDto>> GetTask(Guid boardId, Guid taskId)
+    {
+        return Ok(await taskService.GetTask(boardId, taskId));
+    }
 
-            try { 
-                var tasks = taskService.GetTasksByBoardId(boardId);
-                return Ok(tasks);
-            }
-            catch(Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
+    [HttpPost]
+    public async Task<ActionResult<TaskDto>> AddTask(
+        Guid boardId, CreateTaskRequest request)
+    {
+        var task = await taskService.AddTask(boardId, request);
+        return CreatedAtAction(nameof(GetTask), new { boardId, taskId = task.TaskId }, task);
+    }
 
-        [HttpPost]
-        [Route("")]
-        public IActionResult AddTask(Guid boardId, CreateTaskRequest createTask)
-        {
-            if (boardId == Guid.Empty)
-            {
-                return BadRequest("BoardId cannot be empty");
-            }
+    [HttpPut("{taskId:guid}")]
+    public async Task<ActionResult<TaskDto>> UpdateTask(
+    Guid boardId, Guid taskId, UpdateTaskRequest request)
+    {
+        return Ok(await taskService.UpdateTask(boardId, taskId, request));
+    }
 
-            taskService.AddTask(boardId, TaskMapper.Map(createTask));
+    [HttpPut("{taskId:guid}/status")]
+    public async Task<ActionResult<TaskDto>> ChangeStatus(
+        Guid boardId, Guid taskId, ChangeTaskStatusRequest request)
+    {
+        return Ok(await taskService.ChangeStatus(boardId, taskId, request.Status));
+    }
 
-            return Ok("Task added");
-        }
+    [HttpDelete("{taskId:guid}")]
+    public async Task<IActionResult> DeleteTask(Guid boardId, Guid taskId)
+    {
+        await taskService.DeleteTask(boardId, taskId);
+        return NoContent();
     }
 }

@@ -19,37 +19,6 @@ public class BoardDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<UserEntity>(builder =>
-        {
-            builder.HasKey(user => user.UserId);
-            builder.OwnsOne(user => user.Address);
-
-            builder.Property(user => user.Email)
-                .HasMaxLength(256)
-                .IsRequired();
-
-            builder.HasIndex(user => user.Email)
-                .IsUnique();
-        });
-
-        modelBuilder.Entity<BoardEntity>(builder =>
-        {
-            builder.HasKey(board => board.BoardId);
-        });
-
-        modelBuilder.Entity<TaskEntity>(builder =>
-        {
-            builder.HasKey(task => task.TaskId);
-
-            builder.HasOne<BoardEntity>()
-                .WithMany(board => board.Tasks)
-                .HasForeignKey(task => task.BoardId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasOne(task => task.Responsible)
-                .WithMany(user => user.AssignedTasks)
-                .HasForeignKey(task => task.ResponsibleId)
-                .OnDelete(DeleteBehavior.Restrict);
-        });
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(BoardDbContext).Assembly);
     }
 }

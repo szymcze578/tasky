@@ -14,8 +14,6 @@ public class UserEntity
     public required string Password { get; set; }
     public Address? Address { get; set; }
     public bool IsActive { get; set; }
-
-    public ICollection<BoardEntity> OwnedBoards { get; set; } = new List<BoardEntity>();
     public ICollection<TaskEntity> AssignedTasks { get; set; } = new List<TaskEntity>();
     public DateTime CreationDate { get; set; }
     public DateTime ModificationDate { get; set; }

@@ -25,7 +25,6 @@ namespace Tasky.Infrastructure.Migrations
             modelBuilder.Entity("Tasky.Domain.Entities.BoardEntity", b =>
                 {
                     b.Property<Guid>("BoardId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreationDate")
@@ -57,7 +56,6 @@ namespace Tasky.Infrastructure.Migrations
             modelBuilder.Entity("Tasky.Domain.Entities.TaskEntity", b =>
                 {
                     b.Property<Guid>("TaskId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("BoardId")
@@ -70,13 +68,12 @@ namespace Tasky.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Estimate")
+                    b.Property<int?>("Estimate")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("ModificationDate")
@@ -85,11 +82,13 @@ namespace Tasky.Infrastructure.Migrations
                     b.Property<int>("Position")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("ResponsibleId")
+                    b.Property<Guid?>("ResponsibleId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -143,9 +142,9 @@ namespace Tasky.Infrastructure.Migrations
             modelBuilder.Entity("Tasky.Domain.Entities.BoardEntity", b =>
                 {
                     b.HasOne("Tasky.Domain.Entities.UserEntity", "Owner")
-                        .WithMany("OwnedBoards")
+                        .WithMany()
                         .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Owner");
@@ -162,8 +161,7 @@ namespace Tasky.Infrastructure.Migrations
                     b.HasOne("Tasky.Domain.Entities.UserEntity", "Responsible")
                         .WithMany("AssignedTasks")
                         .HasForeignKey("ResponsibleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Responsible");
                 });
@@ -210,8 +208,6 @@ namespace Tasky.Infrastructure.Migrations
             modelBuilder.Entity("Tasky.Domain.Entities.UserEntity", b =>
                 {
                     b.Navigation("AssignedTasks");
-
-                    b.Navigation("OwnedBoards");
                 });
 #pragma warning restore 612, 618
         }

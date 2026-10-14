@@ -8,7 +8,7 @@ namespace Tasky.API.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/board")]
+[Route("api/boards")]
 public class BoardController(IBoardsService boardsService, IConfiguration configuration) : ControllerBase
 {
 
