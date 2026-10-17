@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Tasky.API.ViewModels.Auth;
+namespace Tasky.Application.Users.Dtos;
 
 public class CreateUserRequest
 {
@@ -17,6 +17,6 @@ public class CreateUserRequest
     [MinLength(8, ErrorMessage = "Password must be at least 8 characters long.")]
     [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$",
         ErrorMessage = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.")]
-    [StringLength(100)]
+    [StringLength(128)]
     public required string Password { get; set; }
 }

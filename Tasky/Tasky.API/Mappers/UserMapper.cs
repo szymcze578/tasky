@@ -17,33 +17,5 @@ namespace Tasky.API.Mappers
                 Plan = userDTO.Plan
             };
         }
-
-        public static CreateUserDTO Map(CreateUserRequest viewModel)
-        {
-            return new CreateUserDTO
-            {
-                UserName = viewModel.UserName,
-                Email = viewModel.Email,
-                Password = viewModel.Password
-            };
-        }
-
-        public static LoginUserDTO Map(LoginUserRequest request)
-        {
-            return new LoginUserDTO
-            {
-                Login = request.Login,
-                Password = request.Password,
-            };
-        }
-
-        public static AuthResponse Map(AuthResultDTO result)
-        {
-            return new AuthResponse
-            {
-                AccessToken = result.AccessToken,
-                Expiration = result.Expiration
-            };
-        }
     }
 }

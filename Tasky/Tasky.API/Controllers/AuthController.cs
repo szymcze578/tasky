@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
-using Tasky.API.Mappers;
-using Tasky.API.ViewModels.Auth;
-using Tasky.Application.Exceptions;
+using Microsoft.AspNetCore.RateLimiting;
 using Tasky.Application.Users;
+using Tasky.Application.Users.Dtos;
 
 namespace Tasky.API.Controllers;
 
@@ -13,55 +11,23 @@ namespace Tasky.API.Controllers;
 [Route("api/auth")]
 public class AuthController(IAuthService authService) : ControllerBase
 {
-    [HttpPost]
-    [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
-    [Route("register")]
-    public async Task<IActionResult> Register(CreateUserRequest user)
+    [HttpPost("register")]
+    [ProducesResponseType(typeof(RegisterResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<ActionResult<RegisterResponse>> Register(CreateUserRequest request, CancellationToken ct)
     {
-        try
-        {
-            var userId = await authService.Register(UserMapper.Map(user));
-
-            return CreatedAtAction(nameof(Register), userId);
-        }
-        catch (DuplicateEmailException ex)
-        {
-            return Problem(
-                detail: ex.Message,
-                statusCode: StatusCodes.Status409Conflict);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return Conflict(new { message = ex.Message });
-        }
+        var userId = await authService.Register(request, ct);
+        return StatusCode(StatusCodes.Status201Created, new RegisterResponse(userId));
     }
 
-    [HttpPost]
+    [HttpPost("login")]
+    [EnableRateLimiting("login")]
     [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
-    [Route("login")]
-    public async Task<IActionResult> Login(LoginUserRequest loginUserRequest)
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<AuthResponse>> Login(LoginUserRequest request, CancellationToken ct)
     {
-        if (loginUserRequest == null 
-            || string.IsNullOrEmpty(loginUserRequest.Login) 
-            || string.IsNullOrEmpty(loginUserRequest.Password))
-        {
-            return BadRequest("Credentials are missing!");
-        }
-
-        try
-        {
-            var result = await authService.Login(UserMapper.Map(loginUserRequest));
-
-            return Ok(UserMapper.Map(result));
-        }
-        catch (InvalidCredentialsException)
-        {
-            return Unauthorized("Invalid login or password.");
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, "Error occured while loging in!");
-        }
+        return Ok(await authService.Login(request, ct));
     }
 }
 
+public record RegisterResponse(Guid UserId);

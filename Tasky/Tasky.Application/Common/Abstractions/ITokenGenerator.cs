@@ -8,5 +8,5 @@ namespace Tasky.Application.Common.Abstractions;
 
 public interface ITokenGenerator
 {
-    AuthResultDTO GenerateToken(UserEntity user);
+    AuthResponse GenerateToken(UserEntity user);
 }

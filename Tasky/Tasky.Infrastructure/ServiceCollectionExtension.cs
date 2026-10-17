@@ -22,6 +22,7 @@ namespace Tasky.Infrastructure
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IBoardsRepository, BoardsRepository>();
             services.AddScoped<ITokenGenerator, JwtTokenGenerator>();
+            services.AddScoped<IPasswordHasher, IdentityPasswordHasher>();
 
             return services;
         }

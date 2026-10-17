@@ -12,7 +12,7 @@ namespace Tasky.Infrastructure.Auth;
 public class JwtTokenGenerator(IConfiguration config) : ITokenGenerator
 {
 
-    public AuthResultDTO GenerateToken(UserEntity user)
+    public AuthResponse GenerateToken(UserEntity user)
     {
         var key = config["Jwt:Key"] ?? throw new InvalidOperationException("JWT key is not configured.");
 
@@ -37,10 +37,9 @@ public class JwtTokenGenerator(IConfiguration config) : ITokenGenerator
             expires: expires,
             signingCredentials: credentials);
 
-        return new AuthResultDTO
-        {
-            AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
-            Expiration = expires
-        };
+        return new AuthResponse(
+            new JwtSecurityTokenHandler().WriteToken(token),
+            expires
+        );
     }
 }

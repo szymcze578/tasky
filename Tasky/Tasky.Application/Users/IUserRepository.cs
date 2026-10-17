@@ -4,11 +4,11 @@ namespace Tasky.Application.Users
 {
     public interface IUserRepository
     {
+        Task Add(UserEntity user, CancellationToken ct);
+        Task<UserEntity?> GetByEmail(string email, CancellationToken ct);
         Task<bool> ExistsByEmail(string email);
         Task<bool> ExistsById(Guid userId);
         Task<UserEntity?> GetUserById(Guid userId);
-        Task<UserEntity?> GetUserByEmail(string email);
-        Task CreateUser(UserEntity user);
         Task UpdateUser(UserEntity user);
         Task SaveChangesAsync(CancellationToken ct = default);
     }

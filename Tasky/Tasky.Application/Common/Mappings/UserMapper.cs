@@ -5,21 +5,6 @@ namespace Tasky.Application.Common.Mappings;
 
 public static class UserMapper
 {
-    public static UserEntity? Map(CreateUserDTO userDTO)
-    {
-        if(userDTO == null)
-        {
-            return null;
-        }
-
-        return new UserEntity
-        {
-            UserName = userDTO.UserName,
-            Email = userDTO.Email,
-            Password = userDTO.Password
-        };
-    }
-
     public static UserDTO Map(UserEntity userEntity)
     {
         return new UserDTO

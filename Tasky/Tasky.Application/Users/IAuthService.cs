@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Tasky.Application.Users.Dtos;
+﻿using Tasky.Application.Users.Dtos;
 
-namespace Tasky.Application.Users
+namespace Tasky.Application.Users;
+
+public interface IAuthService
 {
-    public interface IAuthService
-    {
-        Task<Guid> Register(CreateUserDTO user);
-
-        Task<AuthResultDTO> Login(LoginUserDTO loginRequest);
-    }
+    Task<Guid> Register(CreateUserRequest request, CancellationToken ct);
+    Task<AuthResponse> Login(LoginUserRequest request, CancellationToken ct);
 }
