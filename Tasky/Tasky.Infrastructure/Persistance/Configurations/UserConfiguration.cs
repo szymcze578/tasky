@@ -9,13 +9,28 @@ public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
     public void Configure(EntityTypeBuilder<UserEntity> builder)
     {
         builder.HasKey(user => user.UserId);
-        builder.OwnsOne(user => user.Address);
+        builder.Property(user => user.UserId).ValueGeneratedNever();
+
+        builder.Property(user => user.UserName)
+            .HasMaxLength(UserEntity.UserNameMaxLength)
+            .IsRequired();
 
         builder.Property(user => user.Email)
+            .HasMaxLength(UserEntity.EmailMaxLength)
+            .IsRequired();
+
+        builder.HasIndex(user => user.Email).IsUnique();
+
+        builder.Property(user => user.PasswordHash)
             .HasMaxLength(256)
             .IsRequired();
 
-        builder.HasIndex(user => user.Email)
-            .IsUnique();
+        builder.OwnsOne(user => user.Address, address =>
+        {
+            address.Property(a => a.Street).HasMaxLength(Address.StreetMaxLength);
+            address.Property(a => a.City).HasMaxLength(Address.CityMaxLength);
+            address.Property(a => a.PostalCode).HasMaxLength(Address.PostalCodeMaxLength);
+            address.Property(a => a.Country).HasMaxLength(Address.CountryMaxLength);
+        });
     }
 }

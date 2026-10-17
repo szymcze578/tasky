@@ -19,7 +19,7 @@ public class TaskConfiguration : IEntityTypeConfiguration<TaskEntity>
             .HasMaxLength(20);
 
         builder.HasOne(task => task.Responsible)
-            .WithMany(user => user.AssignedTasks)
+            .WithMany()
             .HasForeignKey(task => task.ResponsibleId)
             .OnDelete(DeleteBehavior.SetNull);
     }
