@@ -1,0 +1,51 @@
+name: tasky
+
+services:
+  boardsDB:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: boards_user
+      POSTGRES_PASSWORD: boards_password
+      POSTGRES_DB: boards_db
+    ports:
+      - "5050:5432"
+    volumes:
+      - boards_db_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U boards_user -d boards_db"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  tasky-api:
+    build:
+     context: ./Tasky
+     dockerfile: Tasky.API/Dockerfile
+    ports:
+      - "6060:8080"
+    env_file:
+      - Tasky/.env
+    depends_on:
+      boardsDB:
+        condition: service_healthy
+
+  tasky-frontend:
+    build:
+      context: ./tasky-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    develop:
+      watch:
+        - path: ./src
+          target: /app/src
+          action: sync
+        - path: ./package.json
+          target: /app/package.json
+          action: restart
+        - path: ./vite.config.js
+          target: /app/vite.config.js
+          action: restart
+
+volumes:
+  boards_db_data:

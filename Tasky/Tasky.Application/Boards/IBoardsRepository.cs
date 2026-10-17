@@ -1,14 +1,12 @@
 ﻿using Tasky.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Tasky.Application.Boards;
 
 public interface IBoardsRepository
 {
-    Task<IEnumerable<BoardEntity>> GetBoardsForUser(Guid userId);
+    Task<IReadOnlyList<BoardEntity>> GetByOwnerId(Guid ownerId);
     Task<BoardEntity?> GetOwnedById(Guid boardId, Guid ownerId);
-    Task AddBoard(BoardEntity board);
+    Task Add(BoardEntity board);
+    void Remove(BoardEntity board);
     Task SaveChanges();
 }

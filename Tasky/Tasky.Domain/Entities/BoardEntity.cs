@@ -40,6 +40,13 @@ public class BoardEntity
         };
     }
 
+    public void Update(string name, string? description)
+    {
+        Name = ValidateName(name);
+        Description = description;
+        UpdateModificationDate();
+    }
+
     public void Rename(string newname)
     {
         Name = ValidateName(newname);

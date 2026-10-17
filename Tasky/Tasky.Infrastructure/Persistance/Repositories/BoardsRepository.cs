@@ -4,35 +4,34 @@ using Tasky.Application.Boards;
 
 namespace Tasky.Infrastructure.Persistance.Repositories;
 
-public class BoardsRepository : IBoardsRepository
+public class BoardsRepository(BoardDbContext context) : IBoardsRepository
 {
-    private readonly BoardDbContext context;
-
-    public BoardsRepository(BoardDbContext dbContext)
-    {
-        context = dbContext;
-    }
-
-    public async Task<IEnumerable<BoardEntity>> GetBoardsForUser(Guid userId)
+    public async Task<IReadOnlyList<BoardEntity>> GetByOwnerId(Guid ownerId)
     {
         return await context.Boards
             .AsNoTracking()
-            .Include(board => board.Tasks)
-            .Where(board => board.OwnerId == userId)
+            .Include(b => b.Tasks)
+            .Where(b => b.OwnerId == ownerId)
+            .OrderBy(b => b.CreationDate)
             .ToListAsync();
     }
 
-    public async Task AddBoard(BoardEntity board)
+    public async Task<BoardEntity?> GetOwnedById(Guid boardId, Guid ownerId)
     {
-        await context.Boards.AddAsync(board);
-        await context.SaveChangesAsync();
+        return await context.Boards
+            .Include(b => b.Tasks)
+            .FirstOrDefaultAsync(b => b.BoardId == boardId && b.OwnerId == ownerId);
     }
 
-    public async Task<BoardEntity?> GetOwnedById(Guid boardId, Guid ownerId)
-    => await context.Boards
-        .Include(b => b.Tasks)
-        .FirstOrDefaultAsync(b => b.BoardId == boardId && b.OwnerId == ownerId);
+    public async Task Add(BoardEntity board)
+    {
+        await context.Boards.AddAsync(board);
+    }
 
+    public void Remove(BoardEntity board)
+    {
+        context.Boards.Remove(board);
+    }
 
     public Task SaveChanges() => context.SaveChangesAsync();
 }

@@ -9,64 +9,47 @@ namespace Tasky.API.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/boards")]
-public class BoardController(IBoardsService boardsService, IConfiguration configuration) : ControllerBase
+public class BoardController(IBoardsService boardsService) : ControllerBase
 {
-
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<BoardDto>), 200)]
-    [Route("")]
-    public async Task<IActionResult> GetBoardsForUser()
+    [ProducesResponseType(typeof(IReadOnlyList<BoardDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IReadOnlyList<BoardDto>>> GetBoards()
     {
-        var userId = Guid.Parse(User.FindFirst("UserId")?.Value);
+        return Ok(await boardsService.GetBoards());
+    }
 
-        if ( userId == Guid.Empty)
-        {
-            return BadRequest("UserId is required");
-        }
-
-        try
-        {
-            var boards = await boardsService.GetBoardsForUser(userId);
-
-            return Ok(boards);
-        }
-        catch
-        {
-            return BadRequest("Failed to fetch boards!");
-        }
+    [HttpGet("{boardId:guid}")]
+    [ProducesResponseType(typeof(BoardDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<BoardDto>> GetBoard(Guid boardId)
+    {
+        return Ok(await boardsService.GetBoard(boardId));
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(BoardDto), 200)]
-    [Route("")]
-    public async Task<IActionResult> AddBoard([FromBody] CreateBoardRequest request)
+    [ProducesResponseType(typeof(BoardDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<BoardDto>> CreateBoard(CreateBoardRequest request)
     {
-        var userId = Guid.Parse(User.FindFirst("UserId")?.Value);
+        var board = await boardsService.CreateBoard(request);
+        return CreatedAtAction(nameof(GetBoard), new { boardId = board.Id }, board);
+    }
 
-        if (userId == Guid.Empty)
-        {
-            return BadRequest("UserId is required");
-        }
+    [HttpPut("{boardId:guid}")]
+    [ProducesResponseType(typeof(BoardDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<BoardDto>> UpdateBoard(Guid boardId, UpdateBoardRequest request)
+    {
+        return Ok(await boardsService.UpdateBoard(boardId, request));
+    }
 
-        if (string.IsNullOrWhiteSpace(request.Name))
-        {
-            return BadRequest("Board name is required");
-        }
-
-        if (!Enum.IsDefined(request.Type))
-        {
-            return BadRequest("Invalid board type");
-        }
-
-        try
-        {
-            var createdBoard = await boardsService.AddBoard(userId, request);
-
-            return Ok(createdBoard);
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound("Owner not found");
-        }
+    [HttpDelete("{boardId:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteBoard(Guid boardId)
+    {
+        await boardsService.DeleteBoard(boardId);
+        return NoContent();
     }
 }
