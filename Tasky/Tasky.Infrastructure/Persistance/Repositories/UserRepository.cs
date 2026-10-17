@@ -31,11 +31,6 @@ public class UserRepository(BoardDbContext dbContext) : IUserRepository
         .FirstOrDefaultAsync(u => u.Email == email, ct);
     }
 
-    public async Task<UserEntity?> GetUserById(Guid userId)
-    {
-        return await dbContext.Users.FirstOrDefaultAsync(u => u.UserId == userId);
-    }
-
     public async Task<bool> ExistsByEmail(string email)
     {
         var normalizedEmail = EmailHelper.Normalize(email);
@@ -48,17 +43,10 @@ public class UserRepository(BoardDbContext dbContext) : IUserRepository
         return await dbContext.Users.AnyAsync(u => u.UserId == userId);
     }
 
-    public async Task UpdateUser(UserEntity user)
-    {
-        dbContext.Users.Update(user);
-        await dbContext.SaveChangesAsync();
-    }
 
-    public Task SaveChangesAsync(CancellationToken ct)
-        => dbContext.SaveChangesAsync(ct);
+    public async Task<UserEntity?> GetById(Guid userId, CancellationToken ct)
+        => await dbContext.Users.FirstOrDefaultAsync(u => u.UserId == userId, ct);
 
-    private static bool IsUniqueViolation(DbUpdateException ex)
-        => ex.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation };
-
+    public Task SaveChanges(CancellationToken ct) => dbContext.SaveChangesAsync(ct);
 
 }

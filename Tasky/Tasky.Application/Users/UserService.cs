@@ -1,42 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Tasky.Domain.Entities;
+﻿using Tasky.Domain.Entities;
 using Tasky.Application.Exceptions;
 using Tasky.Application.Common.Mappings;
 using Tasky.Application.Users.Dtos;
+using Tasky.Application.Common.Abstractions;
 
-namespace Tasky.Application.Users
+namespace Tasky.Application.Users;
+
+public class UserService(IUserRepository users, ICurrentUser currentUser) : IUserService
 {
-    public class UserService(IUserRepository userRepository) : IUserService
+    public async Task<UserDto> SetAddress(AddressRequest request, CancellationToken ct)
     {
-        public async Task<UserDTO?> GetUser(Guid userId)
-        {
-            var user = await userRepository.GetUserById(userId);
-            return UserMapper.Map(user);
-        }
+        var user = await GetCurrentUser(ct);
 
-        public async Task SetAddress(Guid userId, AddressDTO address)
-        {
-            var user = await userRepository.GetUserById(userId);
+        user.UpdateAddress(new Address(
+            request.Street, request.City, request.PostalCode, request.Country));
 
-            if (user == null) {
-                throw new UserNotFoundException($"User with id {userId} does not exist.");
-            }
-
-            user.Address = new Address
-            {
-                Street = address.Street,
-                City = address.City,
-                PostalCode = address.PostalCode,
-                Country = address.Country
-            };
-
-            user.ModificationDate = DateTime.UtcNow;
-
-            await userRepository.SaveChangesAsync();
-        }
+        await users.SaveChanges(ct);
+        return UserMapper.Map(user);
     }
+
+    public async Task<UserDto> GetMe(CancellationToken ct)
+    {
+        var me = await GetCurrentUser(ct);
+        return UserMapper.Map(me);
+    }
+
+
+    public async Task<UserDto> UpdateMe(UpdateUserRequest request, CancellationToken ct)
+    {
+        var user = await GetCurrentUser(ct);
+
+        user.ChangeUserName(request.UserName);
+
+        await users.SaveChanges(ct);
+        return UserMapper.Map(user);
+    }
+
+    public async Task RemoveAddress(CancellationToken ct)
+    {
+        var user = await GetCurrentUser(ct);
+
+        user.UpdateAddress(null);
+
+        await users.SaveChanges(ct);
+    }
+
+    private async Task<UserEntity> GetCurrentUser(CancellationToken ct)
+    => await users.GetById(currentUser.UserId, ct)
+       ?? throw new UserNotFoundException(currentUser.UserId.ToString());
 }

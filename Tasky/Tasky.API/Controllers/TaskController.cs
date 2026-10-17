@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Tasky.API.Mappers;
-using Tasky.API.ViewModels;
 using Tasky.Application.Tasks;
 using Tasky.Application.Tasks.Dtos;
 

@@ -8,8 +8,7 @@ namespace Tasky.Application.Users
         Task<UserEntity?> GetByEmail(string email, CancellationToken ct);
         Task<bool> ExistsByEmail(string email);
         Task<bool> ExistsById(Guid userId);
-        Task<UserEntity?> GetUserById(Guid userId);
-        Task UpdateUser(UserEntity user);
-        Task SaveChangesAsync(CancellationToken ct = default);
+        Task<UserEntity?> GetById(Guid userId, CancellationToken ct);
+        Task SaveChanges(CancellationToken ct);
     }
 }

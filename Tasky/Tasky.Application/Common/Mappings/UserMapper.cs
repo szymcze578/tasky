@@ -5,15 +5,27 @@ namespace Tasky.Application.Common.Mappings;
 
 public static class UserMapper
 {
-    public static UserDTO Map(UserEntity userEntity)
+    public static UserDto Map(UserEntity userEntity)
     {
-        return new UserDTO
+        return new UserDto
         {
-            UserId = userEntity.UserId,
+            Id = userEntity.UserId,
             UserName = userEntity.UserName,
             Email = userEntity.Email,
-            IsActive = userEntity.IsActive,
+            Address = userEntity.Address is null ? null : Map(userEntity.Address),
+            CreationDate = userEntity.CreationDate,
             Plan = "Free plan"
+        };
+    }
+
+    public static AddressDto Map(Address address)
+    {
+        return new AddressDto
+        {
+            Street = address.Street,
+            City = address.City,
+            PostalCode = address.PostalCode,
+            Country = address.Country,
         };
     }
 }
