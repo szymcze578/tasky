@@ -48,7 +48,7 @@ namespace Tasky.Domain.Entities
                 Description = description,
                 ResponsibleId = responsibleId,
                 Status = Status.ToDo,
-                Estimate = estimate,
+                Estimate = ValidateEstimate(estimate),
                 DueDate = dueDate,
                 Position = position,
                 CreationDate = now,
@@ -67,9 +67,12 @@ namespace Tasky.Domain.Entities
 
         public void Update(string title, string? description, int? estimate, DateTime? dueDate)
         {
-            Title = ValidateTitle(title);
+            var validTitle = ValidateTitle(title);
+            var validEstimate = ValidateEstimate(estimate);
+
+            Title = validTitle;
             Description = description;
-            Estimate = ValidateEstimate(estimate);
+            Estimate = validEstimate;
             DueDate = dueDate;
             UpdateModificationDate();
         }
