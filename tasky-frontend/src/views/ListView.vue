@@ -25,16 +25,8 @@
         </div>
       </div>
     </div>
-    <div class="flex gap-2">
-      <TheInput
-        v-model="newTaskName"
-        class="flex flex-3/4"
-        type="text"
-        placeholder="Add new task..."
-        :icon="CirclePlus"
-      />
-      <TheButton :type="ButtonType.Orange" text="Add" class="flex-1/4" />
-    </div>
+    <DateStrip></DateStrip>
+    <TaskComposer @add-task="(value) => addNewTask(value)" />
     <div class="flex flex-col gap-2">
       <TaskItem v-for="(_, index) in activeTasks" :key="index" v-model:task="activeTasks[index]!" />
       <TaskItem
@@ -48,12 +40,12 @@
 
 <script setup lang="ts">
   import ListIcon from '@/components/icons/ListIcon.vue'
-  import TaskItem from '@/components/TaskItem.vue'
-  import TheButton from '@/components/widgets/TheButton.vue'
-  import TheInput from '@/components/widgets/TheInput.vue'
+  import DateStrip from '@/components/list/DateStrip.vue'
+  import TaskComposer from '@/components/list/TaskComposer.vue'
+  import TaskItem from '@/components/list/TaskItem.vue'
   import router from '@/router'
-  import { ButtonType, TaskStatus, type Task } from '@/types/types'
-  import { ChevronLeft, CirclePlus } from '@lucide/vue'
+  import { TaskStatus, type Task } from '@/types/taskTypes'
+  import { ChevronLeft } from '@lucide/vue'
   import { computed, ref } from 'vue'
 
   //defineProps<{}>()
@@ -78,7 +70,16 @@
     tasks.value.filter((task) => task.status == TaskStatus.Completed),
   )
 
-  const newTaskName = ref('')
+  function addNewTask(newTaskName: string) {
+    if (!newTaskName) {
+      return
+    }
+
+    tasks.value.push({
+      status: TaskStatus.ToDo,
+      name: newTaskName,
+    })
+  }
 
   function goBack() {
     router.push('/')

@@ -1,12 +1,12 @@
 <template>
-  <div class="flex flex-col gap-2 cursor-pointer">
+  <div class="flex flex-col gap-2">
     <span v-if="icon" class="flex h-4.5 w-4.5 items-center justify-center text-ink-400">
       <component :is="icon" :size="18" />
     </span>
     <button
       type="button"
       :class="buttonStyle"
-      class="flex-none rounded-xl border-none px-5.5 py-3 text-[14px] font-bold"
+      class="flex-none rounded-xl border-none px-5.5 py-3 text-[14px] font-bold cursor-pointer"
       @click="$emit('onClick')"
     >
       {{ text }}

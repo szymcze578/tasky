@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-  import { TaskStatus, type Task } from '@/types/types'
+  import { TaskStatus, type Task } from '@/types/taskTypes'
   import { computed } from 'vue'
 
   const task = defineModel<Task>('task', { required: true })
