@@ -1,47 +1,30 @@
 import { useAuthStore } from '@/stores/authStore'
-import axios, { AxiosError } from 'axios'
+import createClient, { type Middleware } from 'openapi-fetch'
+import type { paths } from './schema'
 
 export interface ApiError {
   status: number
   message: string
 }
 
-export function normalizeError(error: unknown): ApiError {
-  if (error instanceof AxiosError) {
-    return {
-      status: error.response?.status ?? 0,
-      message: error.response?.data?.message ?? error.message,
-    }
-  }
-
-  return { status: 0, message: 'Unknown error' }
-}
-
-export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
-  headers: { 'Content-Type': 'application/json' },
+export const api = createClient<paths>({
+  baseUrl: import.meta.env.VITE_API_URL ?? 'http://localhost:6060',
 })
 
-apiClient.interceptors.response.use(
-  (response) => response,
-  (error: unknown) => {
-    const isExpiredSession =
-      error instanceof AxiosError &&
-      error.response?.status === 401 &&
-      Boolean(error.config?.headers?.Authorization)
+const authMiddleware: Middleware = {
+  onRequest({ request }) {
+    const { accessToken } = useAuthStore()
+    if (accessToken) request.headers.set('Authorization', `Bearer ${accessToken}`)
+    return request
+  },
 
-    if (isExpiredSession) {
+  onResponse({ request, response }) {
+    // 401 z endpointu auth (zły login) nie oznacza wygasłej sesji
+    const isAuthCall = new URL(request.url).pathname.startsWith('/api/auth')
+    if (response.status === 401 && request.headers.has('Authorization') && !isAuthCall) {
       useAuthStore().logout()
     }
-
-    return Promise.reject(normalizeError(error))
   },
-)
+}
 
-apiClient.interceptors.request.use((config) => {
-  const { accessToken } = useAuthStore()
-  if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}`
-  }
-  return config
-})
+api.use(authMiddleware)

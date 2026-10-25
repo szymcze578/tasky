@@ -14,7 +14,7 @@ export async function bootstrap() {
   try {
     await userStore.fetchUser()
     if (userStore.user) {
-      await boardStore.fetchBoards(userStore.user.userId)
+      await boardStore.fetchBoards()
     }
   } catch {
     authStore.logout()

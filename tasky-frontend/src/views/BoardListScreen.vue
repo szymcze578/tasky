@@ -2,45 +2,36 @@
   <div class="mx-auto w-full max-w-180">
     <BoardListHeader :count="boardStore.boards.length" @create="showCreate = true" />
     <CreateBoardCard v-if="showCreate" @create="handleCreate" @cancel="showCreate = false" />
-    <BoardsList :boards="boardStore.boards" @open="openBoard()" />
+    <BoardsList :boards="boardStore.boards" @open="(boardId) => openBoard(boardId)" />
   </div>
 </template>
 
 <script setup lang="ts">
-  import type { BoardType } from '@/types/types'
   import BoardListHeader from '@/components/BoardListHeader.vue'
   import { ref } from 'vue'
   import CreateBoardCard from '@/components/CreateBoardCard.vue'
   import BoardsList from '@/components/BoardsList.vue'
-  import { createBoard, type CreateBoardViewModel } from '@/api/board'
   import { useBoardStore } from '@/stores/boardStore'
-  import { useUserStore } from '@/stores/userStore'
   import router from '@/router'
+  import { isApiError } from '@/api/errors'
+  import type { BoardType } from '@/api/types'
 
   const boardStore = useBoardStore()
-  const userStore = useUserStore()
-
-  //const emit = defineEmits(['open-board'])
 
   const showCreate = ref(false)
+  const createError = ref<string | null>(null)
 
-  async function handleCreate(payload: string, boardType: BoardType) {
-    const boardToCreate: CreateBoardViewModel = {
-      name: payload,
-      description: '',
-      type: boardType,
-      ownerId: userStore.user?.userId,
+  async function handleCreate(name: string, boardType: BoardType) {
+    createError.value = null
+    try {
+      await boardStore.createBoard({ name, type: boardType })
+      showCreate.value = false
+    } catch (e) {
+      createError.value = isApiError(e) ? e.message : 'Failed to create board'
     }
-
-    await createBoard(boardToCreate)
-      .then(() => {
-        showCreate.value = false
-        if (userStore.user?.userId) boardStore.fetchBoards(userStore.user?.userId)
-      })
-      .catch(() => console.warn('Failed to create new board!'))
   }
 
-  function openBoard() {
-    router.push('/boardId')
+  function openBoard(boardId: string) {
+    router.push({ name: 'board', params: { boardId } })
   }
 </script>

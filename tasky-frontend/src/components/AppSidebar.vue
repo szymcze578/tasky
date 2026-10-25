@@ -36,10 +36,10 @@
         <div
           class="flex h-9.5 w-9.5 flex-none items-center justify-center rounded-pill bg-coral-soft font-display text-[15px] font-bold text-coral"
         >
-          {{ user.initials }}
+          {{ user.userName.charAt(0) }}
         </div>
         <div class="min-w-0 flex-1">
-          <div class="text-[13.5px] font-bold text-ink">{{ user.name }}</div>
+          <div class="text-[13.5px] font-bold text-ink">{{ user.userName }}</div>
           <div class="text-[11.5px] text-ink-400">{{ user.plan }}</div>
         </div>
         <svg
@@ -61,13 +61,14 @@
 </template>
 
 <script setup lang="ts">
-  import type { NavItem, User } from '@/types/types'
+  import type { NavItem } from '@/types/types'
   import TheLogo from './icons/TheLogo.vue'
+  import type { UserDto } from '@/api/types.ts'
 
   defineProps<{
     nav: NavItem[]
     activeNav: string
-    user: User
+    user: UserDto
   }>()
 
   const emit = defineEmits(['select-nav', 'open-menu'])

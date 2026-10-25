@@ -1,16 +1,17 @@
-import { apiClient } from './client'
-import type { components } from './schema'
+// src/api/auth.ts
+import { api } from './client'
+import { unwrap } from './errors'
+import type { AuthResponse, CreateUserRequest, LoginUserRequest, RegisterResponse } from './types'
 
-export type CreateUserRequest = components['schemas']['CreateUserRequest']
-export type LoginUserRequest = components['schemas']['LoginUserRequest']
-export type AuthResponse = components['schemas']['AuthResponse']
-
-export async function registerUser(payload: CreateUserRequest): Promise<unknown> {
-  const { data } = await apiClient.post<CreateUserRequest>('/api/auth/register', payload)
-  return data
+function registerUser(body: CreateUserRequest): Promise<RegisterResponse> {
+  return unwrap(api.POST('/api/auth/register', { body }))
 }
 
-export async function login(payload: LoginUserRequest): Promise<AuthResponse> {
-  const { data } = await apiClient.post<AuthResponse>('/api/auth/login', payload)
-  return data
+function login(body: LoginUserRequest): Promise<AuthResponse> {
+  return unwrap(api.POST('/api/auth/login', { body }))
+}
+
+export const authApi = {
+  register: registerUser,
+  login,
 }

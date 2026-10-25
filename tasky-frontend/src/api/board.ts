@@ -1,25 +1,31 @@
-import { apiClient } from './client'
-import type { components } from './schema'
-import { BoardType, type Board } from '@/types/types'
+import { api } from './client'
+import { unwrap, unwrapVoid } from './errors'
+import type { Board, CreateBoardRequest, UpdateBoardRequest } from './types'
 
-export type CreateBoardViewModel = components['schemas']['CreateBoardViewModel']
-export type BoardViewModel = components['schemas']['BoardViewModel']
-
-function mapBoard(response: BoardViewModel): Board {
-  return {
-    id: response.id ?? '',
-    name: response.name ?? '',
-    type: response.type ?? 0,
-    editedAt: response.updateDate ?? '',
-  }
+function getBoards(): Promise<Board[]> {
+  return unwrap(api.GET('/api/boards'))
 }
 
-export async function getBoardsForUser(UserId: string): Promise<Board[]> {
-  const { data } = await apiClient.get<BoardViewModel[]>('/api/board', { params: { UserId } })
-  return data.map(mapBoard)
+function getBoard(boardId: string): Promise<Board> {
+  return unwrap(api.GET('/api/boards/{boardId}', { params: { path: { boardId } } }))
 }
 
-export async function createBoard(payload: CreateBoardViewModel): Promise<Board> {
-  const { data } = await apiClient.post<BoardViewModel>('/api/board', payload)
-  return mapBoard(data)
+function createBoard(body: CreateBoardRequest): Promise<Board> {
+  return unwrap(api.POST('/api/boards', { body }))
+}
+
+function updateBoard(boardId: string, body: UpdateBoardRequest): Promise<Board> {
+  return unwrap(api.PUT('/api/boards/{boardId}', { params: { path: { boardId } }, body }))
+}
+
+function deleteBoard(boardId: string) {
+  return unwrapVoid(api.DELETE('/api/boards/{boardId}', { params: { path: { boardId } } }))
+}
+
+export const boardsApi = {
+  getAll: getBoards,
+  get: getBoard,
+  create: createBoard,
+  update: updateBoard,
+  remove: deleteBoard,
 }

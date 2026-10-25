@@ -1,7 +1,7 @@
-import { user as fetchCurrentUser } from '@/api/user'
+import { userApi } from '@/api/user'
+import type { UserDto } from '@/api/types'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
-import type { User } from '@/types/types'
+import { computed, ref } from 'vue'
 
 function initialsFrom(userName: string | null | undefined): string {
   if (!userName) return ''
@@ -15,18 +15,17 @@ function initialsFrom(userName: string | null | undefined): string {
 }
 
 export const useUserStore = defineStore('user', () => {
-  const user = ref<User | null>(null)
+  const user = ref<UserDto | null>(null)
+  const initials = computed(() => initialsFrom(user.value?.userName))
 
   async function fetchUser() {
-    const result = await fetchCurrentUser()
-    user.value = {
-      name: result.userName ?? '',
-      plan: result.plan ?? '',
-      initials: initialsFrom(result.userName),
-      userId: result.userId ?? '',
-    }
+    user.value = await userApi.getMe()
     return user.value
   }
 
-  return { user, fetchUser }
+  function reset() {
+    user.value = null
+  }
+
+  return { user, initials, fetchUser, reset }
 })

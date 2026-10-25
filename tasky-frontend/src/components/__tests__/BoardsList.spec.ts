@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import BoardsList from '../BoardsList.vue'
-import { BoardType, type Board } from '@/types/types'
+import { BoardTypes, type Board } from '@/types/types'
 
 describe('BoardsList', () => {
   it('renders boards passed in via the boards prop', () => {
     const boards: Board[] = [
-      { id: '1', name: 'Marketing Launch', type: BoardType.List, editedAt: '2026-07-01' },
+      { id: '1', name: 'Marketing Launch', type: BoardTypes.List, editedAt: '2026-07-01' },
     ]
 
     const wrapper = mount(BoardsList, { props: { boards } })
@@ -20,7 +20,7 @@ describe('BoardsList', () => {
 
     await wrapper.setProps({
       boards: [
-        { id: '2', name: 'Product Roadmap', type: BoardType.Kanban, editedAt: '2026-07-08' },
+        { id: '2', name: 'Product Roadmap', type: BoardTypes.Kanban, updateDate: '2026-07-08' },
       ],
     })
 

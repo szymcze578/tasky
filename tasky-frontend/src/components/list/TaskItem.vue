@@ -9,7 +9,7 @@
         class="h-6 w-6 flex-none appearance-none justify-center rounded-lg cursor-pointer"
         :checked="done"
         :class="done ? 'bg-coral' : 'border-2 border-line-warm bg-cream-50'"
-        @click="toggle"
+        @change="emit('toggle')"
       />
       <svg
         v-if="done"
@@ -27,23 +27,17 @@
       </svg>
     </label>
     <span class="flex text-[16px] font-semibold" :class="done ? 'text-ink-400' : 'text-ink'">{{
-      task.name
+      task.title
     }}</span>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { TaskStatus, type Task } from '@/types/taskTypes'
   import { computed } from 'vue'
+  import type { Task } from '@/api/types'
 
-  const task = defineModel<Task>('task', { required: true })
+  const props = defineProps<{ task: Task }>()
+  const emit = defineEmits<{ toggle: [] }>()
 
-  const done = computed(() => {
-    return task.value.status == TaskStatus.Completed
-  })
-
-  function toggle() {
-    task.value.status =
-      task.value.status === TaskStatus.Completed ? TaskStatus.ToDo : TaskStatus.Completed
-  }
+  const done = computed(() => props.task.status === 'Completed')
 </script>

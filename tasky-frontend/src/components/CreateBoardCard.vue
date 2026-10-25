@@ -22,16 +22,16 @@
         <div class="flex w-full gap-2 sm:w-auto">
           <button
             type="button"
-            :class="segClass(type === BoardType.List)"
-            @click="type = BoardType.List"
+            :class="segClass(type === BoardTypes.List)"
+            @click="type = BoardTypes.List"
           >
             <ListIcon :size="16" />
             <span>List</span>
           </button>
           <button
             type="button"
-            :class="segClass(type === BoardType.Kanban)"
-            @click="type = BoardType.Kanban"
+            :class="segClass(type === BoardTypes.Kanban)"
+            @click="type = BoardTypes.Kanban"
           >
             <KanbanIcon :size="16" />
             <span>Kanban</span>
@@ -61,9 +61,10 @@
 
 <script setup lang="ts">
   import { ref } from 'vue'
-  import { BoardType } from '@/types/types'
   import KanbanIcon from './icons/KanbanIcon.vue'
   import ListIcon from './icons/ListIcon.vue'
+  import type { BoardType } from '@/api/types.ts'
+  import { BoardTypes } from '@/types/types.ts'
 
   const emit = defineEmits<{
     (e: 'create', name: string, type: BoardType): void
@@ -71,19 +72,19 @@
   }>()
 
   const name = ref('')
-  const type = ref(BoardType.List)
+  const type = ref<BoardType>(BoardTypes.List)
 
   function submit() {
     const trimmed = name.value.trim()
     if (!trimmed) return
     emit('create', trimmed, type.value)
     name.value = ''
-    type.value = BoardType.List
+    type.value = BoardTypes.List
   }
 
   function cancel() {
     name.value = ''
-    type.value = BoardType.List
+    type.value = BoardTypes.List
     emit('cancel')
   }
 

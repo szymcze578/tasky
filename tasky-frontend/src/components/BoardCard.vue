@@ -14,9 +14,9 @@
         <span
           class="inline-flex items-center rounded-pill bg-blush px-2.5 py-0.75 text-[11.5px] font-bold text-ink-tag"
         >
-          {{ board.type === BoardType.Kanban ? 'Kanban' : 'List' }}
+          {{ board.type === BoardTypes.Kanban ? 'Kanban' : 'List' }}
         </span>
-        <span class="text-[13px] text-ink-400">Edited {{ dayjs(board.editedAt).fromNow() }}</span>
+        <span class="text-[13px] text-ink-400">Edited {{ dayjs(board.updateDate).fromNow() }}</span>
       </div>
     </div>
 
@@ -25,10 +25,11 @@
 </template>
 
 <script setup lang="ts">
-  import { BoardType, type Board } from '@/types/types'
+  import { BoardTypes } from '@/types/types'
   import dayjs from 'dayjs'
   import ArrowIcon from './icons/ArrowIcon.vue'
   import BoardIconSelector from './BoardIconSelector.vue'
+  import type { Board } from '@/api/types.ts'
 
   defineProps<{
     board: Board

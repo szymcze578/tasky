@@ -14,7 +14,7 @@ const router = createRouter({
       children: [
         // Add future board routes here, e.g.:
         { path: '', name: 'boardList', component: BoardListScreen },
-        { path: '/boardId', name: 'board', component: ListView },
+        { path: 'boards/:boardId', name: 'board', component: ListView, props: true },
       ],
     },
     {

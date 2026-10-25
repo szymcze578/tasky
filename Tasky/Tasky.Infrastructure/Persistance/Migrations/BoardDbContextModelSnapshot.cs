@@ -17,7 +17,7 @@ namespace Tasky.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.1")
+                .HasAnnotation("ProductVersion", "10.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -106,7 +106,6 @@ namespace Tasky.Infrastructure.Migrations
             modelBuilder.Entity("Tasky.Domain.Entities.UserEntity", b =>
                 {
                     b.Property<Guid>("UserId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreationDate")
@@ -123,13 +122,15 @@ namespace Tasky.Infrastructure.Migrations
                     b.Property<DateTime>("ModificationDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("UserId");
 
@@ -159,7 +160,7 @@ namespace Tasky.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Tasky.Domain.Entities.UserEntity", "Responsible")
-                        .WithMany("AssignedTasks")
+                        .WithMany()
                         .HasForeignKey("ResponsibleId")
                         .OnDelete(DeleteBehavior.SetNull);
 
@@ -175,19 +176,23 @@ namespace Tasky.Infrastructure.Migrations
 
                             b1.Property<string>("City")
                                 .IsRequired()
-                                .HasColumnType("text");
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)");
 
                             b1.Property<string>("Country")
                                 .IsRequired()
-                                .HasColumnType("text");
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)");
 
                             b1.Property<string>("PostalCode")
                                 .IsRequired()
-                                .HasColumnType("text");
+                                .HasMaxLength(20)
+                                .HasColumnType("character varying(20)");
 
                             b1.Property<string>("Street")
                                 .IsRequired()
-                                .HasColumnType("text");
+                                .HasMaxLength(200)
+                                .HasColumnType("character varying(200)");
 
                             b1.HasKey("UserEntityUserId");
 
@@ -203,11 +208,6 @@ namespace Tasky.Infrastructure.Migrations
             modelBuilder.Entity("Tasky.Domain.Entities.BoardEntity", b =>
                 {
                     b.Navigation("Tasks");
-                });
-
-            modelBuilder.Entity("Tasky.Domain.Entities.UserEntity", b =>
-                {
-                    b.Navigation("AssignedTasks");
                 });
 #pragma warning restore 612, 618
         }

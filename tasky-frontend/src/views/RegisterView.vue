@@ -52,9 +52,10 @@
   import AuthTextField from '@/components/auth/AuthTextField.vue'
   import AuthCheckbox from '@/components/auth/AuthCheckbox.vue'
   import { computed, ref } from 'vue'
-  import { registerUser } from '@/api/auth'
+
   import { useRouter } from 'vue-router'
   import { Lock, Mail, User } from '@lucide/vue'
+  import { authApi } from '@/api/auth'
 
   const router = useRouter()
 
@@ -76,7 +77,7 @@
       return
     }
     try {
-      await registerUser({ userName: name.value, email: email.value, password: password.value })
+      await authApi.register({ userName: name.value, email: email.value, password: password.value })
       router.push('/login')
     } catch {
       console.error('Failed to register user!')

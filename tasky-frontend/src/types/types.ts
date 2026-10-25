@@ -1,8 +1,9 @@
+import type { BoardType } from '@/api/types'
 import type { Component } from 'vue'
 
-export enum BoardType {
-  List = 0,
-  Kanban = 1,
+export enum BoardTypes {
+  List = 'List',
+  Kanban = 'Kanban',
 }
 
 export interface Board {

@@ -9,7 +9,7 @@
         v-for="board in boards"
         :key="board.id"
         :board="board"
-        @click="$emit('open', board)"
+        @click="$emit('open', board.id)"
       />
 
       <div
@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { Board } from '@/types/types'
+  import type { Board } from '@/api/types.ts'
   import BoardCard from './BoardCard.vue'
 
   defineProps<{

@@ -1,22 +1,26 @@
-import { apiClient } from './client'
-import type { components } from './schema'
+import { api } from './client'
+import { unwrap, unwrapVoid } from './errors'
+import type { AddressRequest, UpdateUserRequest, UserDto } from './types'
 
-export type CreateUserRequest = components['schemas']['CreateUserRequest']
-export type User = components['schemas']['UserViewModel']
-
-// Backend controllers don't declare response types (no [ProducesResponseType]),
-// so Swagger/schema.d.ts has no schema for these responses — typed as unknown
-// until the backend annotates them.
-
-export function getUsers() {
-  return apiClient.get<unknown>('/api/user')
+function getMe(): Promise<UserDto> {
+  return unwrap(api.GET('/api/users/me'))
 }
 
-export function createUser(payload: CreateUserRequest) {
-  return apiClient.post<unknown>('/api/user', payload)
+function updateMe(body: UpdateUserRequest): Promise<UserDto> {
+  return unwrap(api.PUT('/api/users/me', { body }))
 }
 
-export async function user(): Promise<User> {
-  const { data } = await apiClient.get<User>('api/user/me')
-  return data
+function setAddress(body: AddressRequest): Promise<UserDto> {
+  return unwrap(api.PUT('/api/users/me/address', { body }))
+}
+
+function removeAddress() {
+  return unwrapVoid(api.DELETE('/api/users/me/address'))
+}
+
+export const userApi = {
+  getMe,
+  update: updateMe,
+  setAddress,
+  removeAddress,
 }

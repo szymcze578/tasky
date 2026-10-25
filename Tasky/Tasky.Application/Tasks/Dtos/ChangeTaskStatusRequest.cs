@@ -2,5 +2,5 @@
 
 public class ChangeTaskStatusRequest
 {
-    public Status Status { get; set; }
+    public required Status Status { get; set; }
 }
