@@ -19,12 +19,7 @@
         <polyline points="20 6 9 17 4 12" />
       </svg>
     </span>
-    <span class="text-[13.5px] font-semibold leading-[1.4] text-ink-600">
-      I agree to the
-      <a href="#" class="font-bold text-coral-600 no-underline">Terms</a>
-      and
-      <a href="#" class="font-bold text-coral-600 no-underline">Privacy Policy</a>
-    </span>
+    <slot />
   </label>
 </template>
 

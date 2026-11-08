@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
   import { ButtonType } from '@/types/types'
-  import TheButton from '../widgets/TheButton.vue'
+  import TheButton from '../widgets/Buttons/TheButton.vue'
   import { CirclePlus } from '@lucide/vue'
   import { ref } from 'vue'
   import TheInput from '../widgets/TheInput.vue'

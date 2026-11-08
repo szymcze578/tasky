@@ -1,5 +1,5 @@
 import { userApi } from '@/api/user'
-import type { UserDto } from '@/api/types'
+import type { AddressRequest, UserDto } from '@/api/types'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
@@ -23,9 +23,13 @@ export const useUserStore = defineStore('user', () => {
     return user.value
   }
 
+  async function saveAddress(request: AddressRequest) {
+    user.value = await userApi.setAddress(request)
+  }
+
   function reset() {
     user.value = null
   }
 
-  return { user, initials, fetchUser, reset }
+  return { user, initials, fetchUser, reset, saveAddress }
 })

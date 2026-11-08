@@ -60,3 +60,7 @@ export async function unwrap<T>(request: Promise<FetchResult<T>>): Promise<T> {
 export async function unwrapVoid(request: Promise<FetchResult<unknown>>): Promise<void> {
   await resolve(request)
 }
+
+export function errorMessageFrom(e: unknown, fallback = 'Something went wrong.'): string {
+  return isApiError(e) ? e.message : fallback
+}

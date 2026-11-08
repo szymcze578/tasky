@@ -5,6 +5,7 @@
   --color-coral-700: #d2643f;
   --color-coral-soft: #ffe7dc; /* avatar / tinted chip bg */
   --color-coral-tint: #ffede5; /* active nav bg */
+  --color-coral-focus: #f0a88e;
 
   /* ── Warm neutrals / surfaces ────────────────────────── */
   --color-cream-50: #fffdfb; /* cards, inputs */
@@ -37,6 +38,8 @@
   --color-accent-clay: #d98e73;
   --color-accent-blue: #7ba7bc; /* "Review" column */
   --color-accent-green: #6fb08a; /* "Done" column */
+
+  --color-danger: #d64545;
 
   /* ── Fonts ───────────────────────────────────────────── */
   --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
